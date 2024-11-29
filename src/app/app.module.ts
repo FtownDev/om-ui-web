@@ -31,6 +31,7 @@ import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/
 import { HomePageComponent } from './components/home/home-page/home-page.component';
 import { CustomerPageComponent } from './components/customer/customer-page/customer-page.component';
 import { AddCustomerComponent } from './components/customer/add-customer/add-customer.component';
+import { CustomerDetailComponent } from './components/customer/customer-detail/customer-detail.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { AddCustomerComponent } from './components/customer/add-customer/add-cus
     HomePageComponent,
     CustomerPageComponent,
     AddCustomerComponent,
+    CustomerDetailComponent,
   ],
   imports: [
     BrowserModule,

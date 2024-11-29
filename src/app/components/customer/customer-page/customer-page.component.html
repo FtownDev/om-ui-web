@@ -91,7 +91,8 @@
           <tbody>
             <tr
               *ngFor="let customer of this.customers"
-              class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border"
+              class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
+              (click)="selectCustomer(customer)"
             >
               <td class="px-5 py-5 text-sm">
                 {{ customer.created | date : "shortDate" }}

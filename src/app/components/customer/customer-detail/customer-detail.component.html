@@ -1,0 +1,16 @@
+@if (this.customerContext == null) {
+<p>CONTEXT IS NULL</p>
+
+} @else {
+<div class="justify-center min-h-screen">
+  <div class="container max-w-[525px] lg:max-w-5xl px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-semibold leading-tight">Customers</h2>
+    </div>
+    <p>
+      VIEWING: {{ this.customerContext.firstName }}
+      {{ this.customerContext.lastName }}
+    </p>
+  </div>
+</div>
+}

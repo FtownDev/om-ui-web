@@ -4,6 +4,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '@/src/environments/environment.development';
 import { CustomerRetrieveResponse } from '../models/Customer/CustomerRetrieveResponse';
@@ -17,11 +18,22 @@ import { Customer } from '../models/Customer/Customer';
 export class CustomerService {
   private readonly API_URL = environment.API_URL;
 
+  private customerContext = new BehaviorSubject<Customer | null>(null);
+  customerContext$ = this.customerContext.asObservable();
+
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
   constructor(private httpClient: HttpClient) {}
+
+  setCustomerContext(value: Customer) {
+    this.customerContext.next(value);
+  }
+
+  getCustomerContext(): Customer | null {
+    return this.customerContext.getValue();
+  }
 
   getAllCustomers(
     pageSize = 50,

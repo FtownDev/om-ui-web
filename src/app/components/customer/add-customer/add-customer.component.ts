@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../../services/customer.service';
 import { CustomerCreateRequest } from '@/src/app/models/Customer/CustomerCreateRequest';
@@ -17,13 +17,12 @@ export class AddCustomerComponent implements OnInit {
   countryList: Country[] = [];
   customerForm: FormGroup<any> | undefined;
 
-  constructor(
-    private fb: FormBuilder,
-    public customerService: CustomerService,
-    public router: Router
-  ) {}
+  customerService = inject(CustomerService);
+  router = inject(Router);
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this;
     this.customerService.getAllCountries().subscribe((res) => {
       this.countryList = res;
     });
@@ -55,9 +54,7 @@ export class AddCustomerComponent implements OnInit {
   }
 
   onCountryChange(event: any): void {
-    console.log('event value: ', event.value);
     const selectedCountry = this.countryList.find((c) => c.id == event.value);
-    console.log('selected Country: ', selectedCountry);
     if (selectedCountry) {
       this.customerForm!.get('billingAddress.country')!.setValue(
         selectedCountry.name

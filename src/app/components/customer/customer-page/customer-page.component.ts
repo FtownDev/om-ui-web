@@ -1,5 +1,5 @@
 import { CustomerService } from '@/src/app/services/customer.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Customer } from '@/src/app/models/Customer/Customer';
 import { Router } from '@angular/router';
 
@@ -11,13 +11,15 @@ import { Router } from '@angular/router';
   styleUrl: './customer-page.component.css',
 })
 export class CustomerPageComponent implements OnInit {
-  customers: any = [];
+  customers: Customer[] = [];
   addresses = [];
   currentPage: any;
   itemsPerPage: any;
   totalCount = 0;
 
-  constructor(public customerService: CustomerService, public router: Router) {}
+  customerService = inject(CustomerService);
+  router = inject(Router);
+
   ngOnInit() {
     this.customerService
       .getAllCustomers(this.currentPage, this.totalCount)
@@ -28,7 +30,8 @@ export class CustomerPageComponent implements OnInit {
       });
   }
 
-  logData() {
-    console.log(this.customers);
+  async selectCustomer(data: Customer) {
+    await this.customerService.setCustomerContext(data);
+    this.router.navigate(['/customers/detail']);
   }
 }
