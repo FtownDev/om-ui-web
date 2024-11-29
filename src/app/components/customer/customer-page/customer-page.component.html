@@ -1,0 +1,168 @@
+<div class="justify-center min-h-screen">
+  <div class="container max-w-[525px] lg:max-w-5xl px-4">
+    <!-- <h1 class="text-4xl font-semibold mb-6">Customers</h1> -->
+
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-semibold leading-tight">Customers</h2>
+      <button
+        (click)="logData()"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Add New Customer
+      </button>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="my-4 flex sm:flex-row flex-col">
+      <div class="flex flex-row mb-1 sm:mb-0">
+        <div class="relative">
+          <select
+            class="appearance-none h-full rounded-l border block w-full bg-white border-gray-300 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          >
+            <option>All</option>
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+          >
+            <svg
+              class="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+              />
+            </svg>
+          </div>
+        </div>
+        <div class="relative">
+          <input
+            type="text"
+            placeholder="Search customers..."
+            class="appearance-none rounded-r rounded-l sm:rounded-r-none border border-gray-300 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Table -->
+    <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+      <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+          <thead>
+            <tr
+              class="bg-gray-100 text-gray-600 uppercase text-sm font-semibold"
+            >
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+                Created
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+                Name
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+                Email
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+                Primary Phone
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+                Secondary Phone
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let customer of this.customers"
+              class="hover:bg-gray-50"
+            >
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                {{ customer.created | date : "shortDate" }}
+              </td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                {{ customer.firstName }} {{ customer.lastName }}
+              </td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                {{ customer.email }}
+              </td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                {{ customer.primaryPhone }}
+                <span *ngIf="customer.ext" class="text-gray-500 ml-1"
+                  >(Ext. {{ customer.ext }})</span
+                >
+              </td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                {{ customer.secondaryPhone || "N/A" }}
+              </td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                <div class="flex space-x-2">
+                  <button class="text-blue-500 hover:text-blue-700">
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button class="text-red-500 hover:text-red-700">
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <!-- <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+            <span class="text-xs xs:text-sm text-gray-900">
+              Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to 
+              {{ Math.min(currentPage * itemsPerPage, customers.length) }} of 
+              {{ customers.length }} Entries
+            </span>
+            <div class="inline-flex mt-2 xs:mt-0">
+              <button 
+                (click)="onPageChange(currentPage - 1)"
+                [disabled]="currentPage === 1"
+                class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Prev
+              </button>
+              <button 
+                (click)="onPageChange(currentPage + 1)"
+                [disabled]="currentPage * itemsPerPage >= customers.length"
+                class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div> -->
+      </div>
+    </div>
+  </div>
+</div>

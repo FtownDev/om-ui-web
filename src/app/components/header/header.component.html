@@ -1,0 +1,195 @@
+<div
+  class="hidden md:block md:w-56 h-full fixed left-0 top-0 border-r-2 border-light-heading"
+>
+  <div class="py-4">
+    <h1 class="text-2xl font-bold mb-3 px-3">Order Management</h1>
+
+    <div class="h-0.5 bg-light-content mb-2 mx-1.5"></div>
+    <nav>
+      <ul class="px-3">
+        <li class="mb-4">
+          <a
+            href="#"
+            class="flex items-center p-2 hover:bg-light-accent rounded hover:dark:bg-dark-secondary"
+          >
+            <svg
+              class="w-6 h-6 mr-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              ></path>
+            </svg>
+            Dashboard
+          </a>
+        </li>
+        <li class="mb-4">
+          <a
+            href="/customers"
+            class="flex items-center p-2 hover:bg-light-accent rounded hover:dark:bg-dark-secondary"
+          >
+            <ng-icon name="bootstrapPerson" class="text-2xl mr-3" />
+            Customers
+          </a>
+        </li>
+
+        <li class="mb-4">
+          <a
+            href="/orders"
+            class="flex items-center p-2 hover:bg-light-accent rounded hover:dark:bg-dark-secondary"
+          >
+            <ng-icon name="bootstrapFileEarmarkPost" class="text-2xl mr-3" />
+            Orders
+          </a>
+        </li>
+        <li class="mb-4">
+          <a
+            href="#"
+            class="flex items-center p-2 hover:bg-light-accent rounded hover:dark:bg-dark-secondary"
+          >
+            <svg
+              class="w-6 h-6 mr-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            Settings
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="absolute bottom-4 left-2 right-0 px-4">
+      <div class="flex items-center">
+        <input
+          type="checkbox"
+          id="desktop-theme-toggle"
+          class="hidden peer"
+          (click)="toggleTheme()"
+        />
+        <label
+          for="desktop-theme-toggle"
+          class="flex items-center cursor-pointer"
+        >
+          <!-- This is the oval pill-->
+          <div
+            class="w-12 h-6 bg-dark-heading dark:bg-light-heading rounded-full relative"
+          >
+            <div
+              class="w-6 h-6 bg-light-accent dark:bg-dark-accent rounded-full absolute top-0 left-0 transition-transform duration-200 ease-in-out dark:translate-x-full"
+            >
+              <!-- This is the circle button on the silder-->
+            </div>
+          </div>
+          <span class="ml-3 text-sm">Dark Mode</span>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Header -->
+<div
+  class="md:hidden fixed top-0 left-0 right-0 bg-gray-800 text-white p-4 flex justify-between items-center"
+>
+  <h1 class="text-xl font-bold">Logo</h1>
+  <button (click)="toggleMobileMenu()" class="focus:outline-none">
+    <svg
+      class="w-6 h-6"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"
+      ></path>
+    </svg>
+  </button>
+</div>
+
+<!-- Mobile Menu Overlay -->
+<div
+  *ngIf="isMobileMenuOpen"
+  class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+  (click)="toggleMobileMenu()"
+></div>
+
+<!-- Mobile Sidebar -->
+<div
+  [ngClass]="{
+    'translate-x-0': isMobileMenuOpen,
+    '-translate-x-full': !isMobileMenuOpen
+  }"
+  class="md:hidden fixed top-0 left-0 w-64 bg-gray-800 text-white h-screen z-50 transform transition-transform duration-200 ease-in-out"
+>
+  <div class="p-4 flex justify-between items-center border-b border-gray-700">
+    <h1 class="text-xl font-bold">Logo</h1>
+    <button (click)="toggleMobileMenu()" class="focus:outline-none">
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        ></path>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="mt-4">
+    <ul>
+      <li class="mb-2">
+        <a
+          href="#"
+          class="block p-3 hover:bg-gray-700"
+          (click)="toggleMobileMenu()"
+        >
+          Dashboard
+        </a>
+      </li>
+      <li class="mb-2">
+        <a
+          href="#"
+          class="block p-3 hover:bg-gray-700"
+          (click)="toggleMobileMenu()"
+        >
+          Profile
+        </a>
+      </li>
+      <li class="mb-2">
+        <a
+          href="#"
+          class="block p-3 hover:bg-gray-700"
+          (click)="toggleMobileMenu()"
+        >
+          Settings
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<!-- Main Content (with padding to account for sidebar) -->
