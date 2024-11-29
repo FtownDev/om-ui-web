@@ -6,6 +6,8 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
+/* Forms */
+import { ReactiveFormsModule } from '@angular/forms'; // Add this import
 
 /* Components */
 import { AppComponent } from './app.component';
@@ -23,10 +25,12 @@ import {
   bootstrapPerson,
   bootstrapFileEarmarkPost,
   bootstrapFileEarmark,
+  bootstrapPlusCircle,
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
 import { HomePageComponent } from './components/home/home-page/home-page.component';
 import { CustomerPageComponent } from './components/customer/customer-page/customer-page.component';
+import { AddCustomerComponent } from './components/customer/add-customer/add-customer.component';
 
 @NgModule({
   declarations: [
@@ -35,11 +39,13 @@ import { CustomerPageComponent } from './components/customer/customer-page/custo
     FooterComponent,
     HomePageComponent,
     CustomerPageComponent,
+    AddCustomerComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CommonModule,
+    ReactiveFormsModule,
     NgIconsModule.withIcons({
       bootstrapTwitterX,
       bootstrapFacebook,
@@ -50,6 +56,7 @@ import { CustomerPageComponent } from './components/customer/customer-page/custo
       bootstrapPerson,
       bootstrapFileEarmark,
       bootstrapFileEarmarkPost,
+      bootstrapPlusCircle,
     }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],

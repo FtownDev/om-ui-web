@@ -1,6 +1,7 @@
 import { CustomerService } from '@/src/app/services/customer.service';
 import { Component, OnInit } from '@angular/core';
-import { Customer } from '@/src/app/models/Customer';
+import { Customer } from '@/src/app/models/Customer/Customer';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customer-page',
@@ -16,7 +17,7 @@ export class CustomerPageComponent implements OnInit {
   itemsPerPage: any;
   totalCount = 0;
 
-  constructor(public customerService: CustomerService) {}
+  constructor(public customerService: CustomerService, public router: Router) {}
   ngOnInit() {
     this.customerService
       .getAllCustomers(this.currentPage, this.totalCount)

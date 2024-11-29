@@ -1,14 +1,13 @@
 <div class="justify-center min-h-screen">
   <div class="container max-w-[525px] lg:max-w-5xl px-4">
-    <!-- <h1 class="text-4xl font-semibold mb-6">Customers</h1> -->
-
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-3xl font-semibold leading-tight">Customers</h2>
       <button
-        (click)="logData()"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        (click)="this.router.navigate(['/customers/add'])"
+        class="bg-light-content dark:bg-dark-content text-light-section dark:text-dark-accent py-2 px-4 rounded-full flex"
       >
-        Add New Customer
+        Add Customer
+        <ng-icon class="text-2xl ml-2" name="bootstrapPlusCircle" />
       </button>
     </div>
 
@@ -17,7 +16,7 @@
       <div class="flex flex-row mb-1 sm:mb-0">
         <div class="relative">
           <select
-            class="appearance-none h-full rounded-l border block w-full bg-white border-gray-300 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            class="appearance-none h-full rounded border block w-full bg-white border-gray-300 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           >
             <option>All</option>
             <option>Active</option>
@@ -37,40 +36,54 @@
             </svg>
           </div>
         </div>
-        <div class="relative">
+        <div class="relative ml-4">
           <input
             type="text"
             placeholder="Search customers..."
-            class="appearance-none rounded-r rounded-l sm:rounded-r-none border border-gray-300 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+            class="appearance-none rounded-full border border-gray-300 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
           />
         </div>
       </div>
     </div>
 
     <!-- Customer Table -->
-    <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+    <div
+      class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto dark:text-dark-heading"
+    >
       <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
         <table class="min-w-full leading-normal">
           <thead>
             <tr
-              class="bg-gray-100 text-gray-600 uppercase text-sm font-semibold"
+              class="bg-light-section dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
             >
-              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
                 Created
               </th>
-              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
                 Name
               </th>
-              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
                 Email
               </th>
-              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
                 Primary Phone
               </th>
-              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
                 Secondary Phone
               </th>
-              <th class="px-5 py-3 border-b-2 border-gray-200 text-left">
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
                 Actions
               </th>
             </tr>
@@ -78,29 +91,32 @@
           <tbody>
             <tr
               *ngFor="let customer of this.customers"
-              class="hover:bg-gray-50"
+              class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border"
             >
-              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+              <td class="px-5 py-5 text-sm">
                 {{ customer.created | date : "shortDate" }}
               </td>
-              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+              <td class="px-5 py-5 text-sm">
                 {{ customer.firstName }} {{ customer.lastName }}
               </td>
-              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+              <td class="px-5 py-5 text-sm">
                 {{ customer.email }}
               </td>
-              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+              <td class="px-5 py-5 text-sm">
                 {{ customer.primaryPhone }}
-                <span *ngIf="customer.ext" class="text-gray-500 ml-1"
+                <span
+                  *ngIf="customer.ext"
+                  class="text-light-heading dark:text-dark-secondary ml-1"
                   >(Ext. {{ customer.ext }})</span
                 >
               </td>
-              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+              <td class="px-5 py-5 text-sm">
                 {{ customer.secondaryPhone || "N/A" }}
               </td>
-              <td class="px-5 py-5 border-b border-gray-200 text-sm">
+              <td class="px-5 py-5 text-sm">
                 <div class="flex space-x-2">
                   <button class="text-blue-500 hover:text-blue-700">
+                    <!-- Replace with ng-icons at some point-->
                     <svg
                       class="w-5 h-5"
                       fill="none"
@@ -131,6 +147,7 @@
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                       ></path>
                     </svg>
+                    <!-- ^^^^^^ Replace with ng-icons at some point-->
                   </button>
                 </div>
               </td>

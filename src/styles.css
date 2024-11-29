@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .form-input {
+    @apply appearance-none rounded-full border border-light-border dark:border-dark-border border-b block pl-6 pr-6 py-2 w-full bg-light-input dark:bg-dark-input text-sm placeholder-gray-400 text-light-content dark:text-dark-content focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none;
+  }
+}

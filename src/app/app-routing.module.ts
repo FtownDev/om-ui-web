@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './components/home/home-page/home-page.component';
 import { CustomerPageComponent } from './components/customer/customer-page/customer-page.component';
+import { AddCustomerComponent } from './components/customer/add-customer/add-customer.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -9,6 +10,11 @@ const routes: Routes = [
   {
     path: 'customers',
     component: CustomerPageComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'customers/add',
+    component: AddCustomerComponent,
     //canActivate: [AuthGuard],
   },
 ];
