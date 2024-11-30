@@ -18,6 +18,7 @@ import { CustomerPageComponent } from './components/customer/customer-page/custo
 import { AddCustomerComponent } from './components/customer/add-customer/add-customer.component';
 import { CustomerDetailComponent } from './components/customer/customer-detail/customer-detail.component';
 import { ViewInventoryComponent } from './components/inventory/view-inventory/view-inventory.component';
+import { AddInventoryComponent } from './components/inventory/add-inventory/add-inventory.component';
 
 /* Icons */
 import { NgIconsModule } from '@ng-icons/core';
@@ -32,6 +33,7 @@ import {
   bootstrapFileEarmark,
   bootstrapPlusCircle,
   bootstrapTable,
+  bootstrapPersonSquare,
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
 
@@ -45,6 +47,7 @@ import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/
     AddCustomerComponent,
     CustomerDetailComponent,
     ViewInventoryComponent,
+    AddInventoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,6 +66,7 @@ import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/
       bootstrapFileEarmarkPost,
       bootstrapPlusCircle,
       bootstrapTable,
+      bootstrapPersonSquare,
     }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],

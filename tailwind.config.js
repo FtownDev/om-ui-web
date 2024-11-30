@@ -27,7 +27,7 @@ module.exports = {
           fill: "#171717",
           section: "#252525",
           border: "#424242",
-          primary: "#0D6EFD",
+          primary: "#f8f9fa",
           secondary: "#6C757D",
           accent: "#2C2C2C",
           input: "#303030",

@@ -1,0 +1,175 @@
+<div class="justify-center min-h-screen">
+  <div class="container max-w-[525px] lg:max-w-3xl p-4">
+    <div class="flex justify-end mb-5 mr-7">
+      <button
+        (click)="toggleCategory()"
+        class="flex bg-light-content dark:bg-dark-content text-light-section dark:text-dark-accent py-2 px-7 rounded-md"
+      >
+        Add {{ this.addCategory ? "Item" : "Category" }}
+        <ng-icon class="text-2xl ml-2" name="bootstrapPlusCircle" />
+      </button>
+    </div>
+    <div class="justify-between items-center mb-6">
+      @if(!addCategory) { @if(!itemForm) {
+      <h2 class="text-3xl font-semibold leading-tight">FG is null</h2>
+      } @else{
+
+      <form
+        [formGroup]="itemForm"
+        (ngSubmit)="onItemSubmit()"
+        class="max-w-2xl mx-auto bg-light-fill dark:bg-dark-section p-8 rounded-lg shadow-lg border-t"
+      >
+        <h2
+          class="text-2xl font-bold mb-6 text-center text-light-heading dark:text-dark-heading"
+        >
+          Add Item
+        </h2>
+        <div class="grid md:grid-cols-12 gap-4 mb-4">
+          <div class="col-span-6">
+            <label
+              for="name"
+              class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+              >Item Name *</label
+            >
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-input rounded-md"
+              [ngClass]="{
+                'border-red-500': c['name'].invalid && c['name'].touched
+              }"
+            />
+            <p
+              *ngIf="c['name'].invalid && c['name'].touched"
+              class="text-light-error dark:text-dark-error text-xs mt-1"
+            >
+              Item Name is required
+            </p>
+          </div>
+          <div class="col-span-6">
+            <label
+              for="categoryId"
+              class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+              >Category *
+            </label>
+            <select
+              id="categoryId"
+              class="form-input rounded-md appearance-auto"
+              (change)="onCategoryChange($event.target)"
+              [ngClass]="{
+                'border-light-error':
+                  c['categoryId'].invalid && c['categoryId'].touched
+              }"
+            >
+              <option>Select a category</option>
+              @for (category of categoryList; track category.id) {
+              <option [value]="category.id">{{ category.name }}</option>
+              }
+            </select>
+            @if(c['categoryId'].invalid && c['categoryId'].touched) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
+              category is required
+            </p>
+
+            <!---->
+            <!---->
+            <!---->
+            }
+          </div>
+
+          <div class="col-span-6">
+            <label for="price">Item Price $</label>
+            <input
+              id="price"
+              type="number"
+              formControlName="price"
+              step="0.01"
+              class="form-input rounded-md appearance-auto"
+              min="0.01"
+              max="20000"
+            />
+
+            <!-- Error messages -->
+            <div *ngIf="c['price'].invalid && c['price']; touched">
+              <small *ngIf="c['price'].errors?.['required']" class="error">
+                Price is required
+              </small>
+            </div>
+          </div>
+
+          <div class="flex col-span-6 justify-end py-6">
+            <button
+              type="submit"
+              [disabled]="sendingData || itemForm.invalid"
+              class="w-1/2 bg-light-content dark:bg-dark-content text-light-section dark:text-dark-accent py-2 px-4 rounded-full disabled:bg-light-heading cursor-pointer disabled:cursor-not-allowed"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      </form>
+
+      } } @else { @if(categoryForm) {
+      <form
+        [formGroup]="categoryForm"
+        (ngSubmit)="onCategorySubmit()"
+        class="max-w-2xl mx-auto bg-light-fill dark:bg-dark-section p-8 rounded-lg shadow-lg border-t"
+      >
+        <h2
+          class="text-2xl font-bold mb-6 text-center text-light-heading dark:text-dark-heading"
+        >
+          Add Category
+        </h2>
+        <div class="grid md:grid-cols-12 gap-4 mb-4">
+          <div class="col-span-6">
+            <label
+              for="name"
+              class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+              >Name *</label
+            >
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-input rounded-md"
+              [ngClass]="{
+                'border-red-500': f['name'].invalid && f['name'].touched
+              }"
+            />
+            <p
+              *ngIf="f['name'].invalid && f['name'].touched"
+              class="text-light-error dark:text-dark-error text-xs mt-1"
+            >
+              Category Name is required
+            </p>
+          </div>
+          <div class="col-span-6">
+            <label
+              for="description"
+              class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+              >Description</label
+            >
+            <input
+              type="text"
+              id="description"
+              formControlName="description"
+              class="form-input rounded-md"
+            />
+          </div>
+
+          <div class="flex col-span-6 py-6">
+            <button
+              type="submit"
+              [disabled]="sendingData || categoryForm.invalid"
+              class="w-1/2 bg-light-content dark:bg-dark-content text-light-section dark:text-dark-accent py-2 px-4 rounded-full disabled:bg-light-heading cursor-pointer disabled:cursor-not-allowed"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      </form>
+      }}
+    </div>
+  </div>
+</div>

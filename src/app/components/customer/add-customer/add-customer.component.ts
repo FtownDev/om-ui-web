@@ -22,7 +22,6 @@ export class AddCustomerComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this;
     this.customerService.getAllCountries().subscribe((res) => {
       this.countryList = res;
     });
