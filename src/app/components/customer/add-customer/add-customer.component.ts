@@ -16,7 +16,7 @@ import { Customer } from '@/src/app/models/Customer/Customer';
 export class AddCustomerComponent implements OnInit {
   countryList: Country[] = [];
   customerForm: FormGroup<any> | undefined;
-
+  sendingData: Boolean = false;
   customerService = inject(CustomerService);
   router = inject(Router);
   constructor(private fb: FormBuilder) {}
@@ -66,23 +66,28 @@ export class AddCustomerComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.sendingData = true;
     if (this.customerForm?.valid) {
       const customerData: CustomerCreateRequest = this.customerForm.value;
 
       this.customerService.createCustomer(customerData).subscribe({
         next: (response) => {
           console.log('Customer created successfully', response);
-          // Handle successful creation (e.g., show success message, reset form)
-          this.customerForm?.reset();
+
+          this.customerService.setCustomerContext(response);
+
+          this.router.navigate(['/customers/detail']);
+          this.sendingData = false;
         },
         error: (error) => {
           console.error('Error creating customer', error);
-          // Handle error (e.g., show error message)
+          this.sendingData = false;
         },
       });
     } else {
       // Mark all fields as touched to show validation errors
       this.markFormGroupTouched(this.customerForm!);
+      this.sendingData = false;
     }
   }
 

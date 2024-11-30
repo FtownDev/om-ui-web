@@ -38,14 +38,6 @@ module.exports = {
           error: "#b91c1c",
           nav: "#151b23",
         },
-        /**
-         * #
-         * .dark-mode {
-          --bg-main: #121212;
-          --bg-section: ;
-
-        }
-         */
       },
       fontFamily: { sans: ["Lexend", "Chakra Petch", "Monda"] },
     },

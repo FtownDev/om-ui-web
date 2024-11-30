@@ -137,7 +137,7 @@
           />
         </div>
 
-        <h3 class="text-xl font-semibold mb-4 col-span-12">
+        <h3 class="text-center text-xl font-semibold mt-4 col-span-12">
           Address Information
         </h3>
 
@@ -304,8 +304,8 @@
           <div class="flex col-span-12 justify-end">
             <button
               type="submit"
-              [disabled]="customerForm.invalid"
-              class="bg-light-content dark:bg-dark-content text-light-section dark:text-dark-accent py-2 px-4 rounded-full flex"
+              [disabled]="sendingData || customerForm.invalid"
+              class="bg-light-content dark:bg-dark-content text-light-section dark:text-dark-accent py-2 px-4 rounded-full flex disabled:bg-light-heading cursor-pointer disabled:cursor-not-allowed"
             >
               Add
             </button>

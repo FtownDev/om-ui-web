@@ -13,6 +13,11 @@ import { ReactiveFormsModule } from '@angular/forms'; // Add this import
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { HomePageComponent } from './components/home/home-page/home-page.component';
+import { CustomerPageComponent } from './components/customer/customer-page/customer-page.component';
+import { AddCustomerComponent } from './components/customer/add-customer/add-customer.component';
+import { CustomerDetailComponent } from './components/customer/customer-detail/customer-detail.component';
+import { ViewInventoryComponent } from './components/inventory/view-inventory/view-inventory.component';
 
 /* Icons */
 import { NgIconsModule } from '@ng-icons/core';
@@ -26,12 +31,9 @@ import {
   bootstrapFileEarmarkPost,
   bootstrapFileEarmark,
   bootstrapPlusCircle,
+  bootstrapTable,
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
-import { HomePageComponent } from './components/home/home-page/home-page.component';
-import { CustomerPageComponent } from './components/customer/customer-page/customer-page.component';
-import { AddCustomerComponent } from './components/customer/add-customer/add-customer.component';
-import { CustomerDetailComponent } from './components/customer/customer-detail/customer-detail.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,7 @@ import { CustomerDetailComponent } from './components/customer/customer-detail/c
     CustomerPageComponent,
     AddCustomerComponent,
     CustomerDetailComponent,
+    ViewInventoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +62,7 @@ import { CustomerDetailComponent } from './components/customer/customer-detail/c
       bootstrapFileEarmark,
       bootstrapFileEarmarkPost,
       bootstrapPlusCircle,
+      bootstrapTable,
     }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],

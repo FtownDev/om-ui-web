@@ -1,0 +1,101 @@
+<div class="justify-center min-h-screen">
+  <div class="container max-w-[525px] lg:max-w-5xl p-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-semibold leading-tight">Inventory</h2>
+      <button
+        (click)="this.router.navigate(['/inventory/add'])"
+        class="bg-light-content dark:bg-dark-content text-light-section dark:text-dark-accent py-2 px-4 rounded-full flex"
+      >
+        New Item
+        <ng-icon class="text-2xl ml-2" name="bootstrapPlusCircle" />
+      </button>
+    </div>
+
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-auto dark:text-dark-heading pb-6"
+    >
+      @for(category of categories; track category.id) {
+      <div
+        class="bg-light-border dark:bg-dark-border shadow-md rounded-lg overflow-hidden self-start"
+      >
+        <div
+          class="flex justify-between bg-light-section text-light-heading dark:bg-dark-section dark:text-dark-heading"
+          (click)="toggleCategory(category.id)"
+        >
+          <div class="w-full p-3 font-semibold text-lg cursor-pointer">
+            {{ category.name }}
+          </div>
+
+          <div class="p-3 font-semibold text-lg">
+            {{ expandedCategories[category.id] ? "▼" : "►" }}
+          </div>
+        </div>
+        @if(expandedCategories[category.id]) {
+        <div class="transition-all ease-in-out duration-300">
+          <table class="w-full">
+            <thead
+              class="bg-light-accent dark:bg-dark-accent dark:text-dark-content"
+            >
+              <tr class="">
+                <th class="p-2 px-4 text-left">Item</th>
+                <th class="p-2 px-4 text-right">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of items; track item.id) { @if(item.categoryId ==
+              category.id){
+              <tr
+                class="bg-light-section dark:bg-dark-section border-light-border dark:border-dark-border last:border-b-0"
+              >
+                <td class="p-2 px-4">{{ item.name }}</td>
+                <td class="p-2 px-4 text-right">{{ item.price | currency }}</td>
+              </tr>
+              } }
+            </tbody>
+          </table>
+        </div>
+
+        }
+      </div>
+      }
+      <!-- <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+          <thead>
+            <tr
+              class="bg-light-section dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
+            >
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Item Name
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Category
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Price
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of items; track item.id) {
+            <tr
+              class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
+            >
+              <td class="px-5 py-5 text-sm">{{ item.name }}</td>
+              <td class="px-5 py-5 text-sm">
+                {{ getCategoryName(item.categoryId) }}
+              </td>
+              <td class="px-5 py-5 text-sm">{{ item.price | currency }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div> -->
+    </div>
+  </div>
+</div>
