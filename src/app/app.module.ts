@@ -39,6 +39,7 @@ import {
   bootstrapPersonSquare,
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
+import { SelectCustomerComponent } from './components/order/select-customer/select-customer.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/
     ViewOrdersComponent,
     AddOrderComponent,
     OrderDetailComponent,
+    SelectCustomerComponent,
   ],
   imports: [
     BrowserModule,

@@ -31,7 +31,6 @@ export class OrderDetailComponent implements OnInit {
     });
     this.eventTypes = this.orderService.getEventsContext();
     if (this.eventTypes?.length == 0) {
-      console.log('getting types');
       this.orderService.getEventTypes().subscribe((res) => {
         this.eventTypes = res;
         this.orderService.setEventsContext(res);

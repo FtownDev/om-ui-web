@@ -22,6 +22,9 @@ export class CustomerService {
   private customerContext = new BehaviorSubject<Customer | null>(null);
   customerContext$ = this.customerContext.asObservable();
 
+  private addressContext = new BehaviorSubject<Address[] | null>(null);
+  addressContext$ = this.addressContext.asObservable();
+
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
@@ -30,10 +33,21 @@ export class CustomerService {
 
   setCustomerContext(value: Customer) {
     this.customerContext.next(value);
+    this.getAddresses(value.id).subscribe((res) => {
+      this.setaddressContext(res);
+    });
   }
 
   getCustomerContext(): Customer | null {
     return this.customerContext.getValue();
+  }
+
+  setaddressContext(value: Address[]) {
+    this.addressContext.next(value);
+  }
+
+  getaddressContext(): Address[] | null {
+    return this.addressContext.getValue();
   }
 
   getAllCustomers(

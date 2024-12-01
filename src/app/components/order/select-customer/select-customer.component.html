@@ -1,0 +1,72 @@
+<div class="justify-center min-h-screen">
+  <div class="container max-w-[525px] lg:max-w-5xl px-4">
+    <!-- Customer Table -->
+    <div
+      class="mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto dark:text-dark-heading"
+    >
+      <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+          <thead>
+            <tr
+              class="bg-light-section dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
+            >
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Created
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Name
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Email
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Primary Phone
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Secondary Phone
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let customer of this.customers"
+              class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
+              (click)="selectCustomer(customer)"
+            >
+              <td class="px-5 py-5 text-sm">
+                {{ customer.created | date : "shortDate" }}
+              </td>
+              <td class="px-5 py-5 text-sm">
+                {{ customer.firstName }} {{ customer.lastName }}
+              </td>
+              <td class="px-5 py-5 text-sm">
+                {{ customer.email }}
+              </td>
+              <td class="px-5 py-5 text-sm">
+                {{ customer.primaryPhone }}
+                <span
+                  *ngIf="customer.ext"
+                  class="text-light-heading dark:text-dark-secondary ml-1"
+                  >(Ext. {{ customer.ext }})</span
+                >
+              </td>
+              <td class="px-5 py-5 text-sm">
+                {{ customer.secondaryPhone || "N/A" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
