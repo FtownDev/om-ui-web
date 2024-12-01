@@ -71,6 +71,7 @@
           <tbody>
             @for(order of orders; track order.id) {
             <tr
+              (click)="selectOrder(order)"
               class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
             >
               <td class="px-5 py-5 text-sm">
@@ -89,7 +90,7 @@
                 class="px-5 py-5 text-sm"
                 [ngClass]="{ 'text-light-success': order.currentStatus == 3 }"
               >
-                {{ order.currentStatus }}
+                {{ getOrderStatus(order.currentStatus) }}
               </td>
               <td
                 class="px-5 py-5 text-sm"
@@ -139,31 +140,6 @@
             }
           </tbody>
         </table>
-
-        <!-- Pagination -->
-        <!-- <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
-              <span class="text-xs xs:text-sm text-gray-900">
-                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to 
-                {{ Math.min(currentPage * itemsPerPage, customers.length) }} of 
-                {{ customers.length }} Entries
-              </span>
-              <div class="inline-flex mt-2 xs:mt-0">
-                <button 
-                  (click)="onPageChange(currentPage - 1)"
-                  [disabled]="currentPage === 1"
-                  class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Prev
-                </button>
-                <button 
-                  (click)="onPageChange(currentPage + 1)"
-                  [disabled]="currentPage * itemsPerPage >= customers.length"
-                  class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
-              </div>
-            </div> -->
       </div>
     </div>
     } }

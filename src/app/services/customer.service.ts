@@ -11,6 +11,7 @@ import { CustomerRetrieveResponse } from '../models/Customer/CustomerRetrieveRes
 import { CustomerCreateRequest } from '../models/Customer/CustomerCreateRequest';
 import { Country } from '../models/Address/Country';
 import { Customer } from '../models/Customer/Customer';
+import { Address } from '../models/Address/Address';
 
 @Injectable({
   providedIn: 'root',
@@ -70,6 +71,14 @@ export class CustomerService {
         map((response) => response),
         catchError(this.handleError)
       );
+  }
+
+  getAddresses(customerId: string): Observable<Address[]> {
+    let requestUrl = `${this.API_URL}/customers/${customerId}/address`;
+    return this.httpClient.get<Address[]>(requestUrl).pipe(
+      map((response) => response),
+      catchError(this.handleError)
+    );
   }
 
   private handleError(error: HttpErrorResponse) {

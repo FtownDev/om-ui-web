@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CustomerService } from '@/src/app/services/customer.service';
 import { Customer } from '@/src/app/models/Customer/Customer';
 
@@ -11,8 +10,7 @@ import { Customer } from '@/src/app/models/Customer/Customer';
 })
 export class CustomerDetailComponent implements OnInit {
   customerContext: Customer | null = null;
-
-  constructor(private customerService: CustomerService) {}
+  customerService = inject(CustomerService);
 
   ngOnInit(): void {
     this.customerService.customerContext$.subscribe((value) => {

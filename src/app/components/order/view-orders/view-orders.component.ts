@@ -35,12 +35,9 @@ export class ViewOrdersComponent implements OnInit {
         this.itemsPerPage = res.pageSize;
         this.totalCount += res.pageSize;
         this.getCustomers();
+        this.getEventTypes();
+        this.isLoading = false;
       });
-
-    this.orderService.getEventTypes().subscribe((res) => {
-      console.log(res);
-      this.eventTypes = res;
-    });
   }
 
   getCustomers() {
@@ -50,11 +47,16 @@ export class ViewOrdersComponent implements OnInit {
           .getCustomer(o.billedToCustomerId)
           .subscribe((res) => this.customers.push(res));
       });
-
-      this.isLoading = false;
     } else {
       console.log('orders is empty');
     }
+  }
+
+  getEventTypes() {
+    this.orderService.getEventTypes().subscribe((res) => {
+      this.eventTypes = res;
+      this.orderService.setEventsContext(res);
+    });
   }
 
   getEventName(id: string) {
@@ -64,10 +66,23 @@ export class ViewOrdersComponent implements OnInit {
     } else {
       return event.name;
     }
+    return null;
   }
 
   getCustomerName(id: string) {
     const customer = this.customers.find((c) => c.id == id);
     return customer?.firstName + ' ' + customer?.lastName;
+  }
+
+  getOrderStatus(id: number) {
+    return OrderStatus[id];
+  }
+
+  async selectOrder(data: Order) {
+    await this.orderService.setOrderContext(data);
+    await this.customerService.setCustomerContext(
+      this.customers.find((c) => c.id == data.billedToCustomerId)!
+    );
+    this.router.navigate(['/orders/detail']);
   }
 }

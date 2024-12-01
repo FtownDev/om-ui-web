@@ -7,6 +7,8 @@ import { CustomerDetailComponent } from './components/customer/customer-detail/c
 import { ViewInventoryComponent } from './components/inventory/view-inventory/view-inventory.component';
 import { AddInventoryComponent } from './components/inventory/add-inventory/add-inventory.component';
 import { ViewOrdersComponent } from './components/order/view-orders/view-orders.component';
+import { OrderDetailComponent } from './components/order/order-detail/order-detail.component';
+import { AddOrderComponent } from './components/order/add-order/add-order.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -35,6 +37,14 @@ const routes: Routes = [
   {
     path: 'orders',
     component: ViewOrdersComponent,
+  },
+  {
+    path: 'orders/detail',
+    component: OrderDetailComponent,
+  },
+  {
+    path: 'orders/add',
+    component: AddOrderComponent,
   },
 ];
 

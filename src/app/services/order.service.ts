@@ -4,10 +4,11 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '@/src/environments/environment.development';
 import { OrderRetrieveResponse } from '../models/Order/OrderRetrieveResponse';
 import { EventType } from '../models/Order/EventType';
+import { Order } from '../models/Order/Order';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +16,33 @@ import { EventType } from '../models/Order/EventType';
 export class OrderService {
   private readonly API_URL = environment.API_URL;
 
+  private orderContext = new BehaviorSubject<Order | null>(null);
+  orderContext$ = this.orderContext.asObservable();
+
+  private eventTypesContext = new BehaviorSubject<EventType[] | null>(null);
+  eventTypesContext$ = this.eventTypesContext.asObservable();
+
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
   constructor(private httpClient: HttpClient) {}
+
+  setOrderContext(value: Order) {
+    this.orderContext.next(value);
+  }
+
+  getOrderContext(): Order | null {
+    return this.orderContext.getValue();
+  }
+
+  setEventsContext(value: EventType[]) {
+    this.eventTypesContext.next(value);
+  }
+
+  getEventsContext(): EventType[] | null {
+    return this.eventTypesContext.getValue();
+  }
 
   getOrders(
     pageSize = 50,
@@ -35,7 +58,6 @@ export class OrderService {
       );
   }
 
-  //
   getEventTypes(): Observable<EventType[]> {
     return this.httpClient
       .get<EventType[]>(`${this.API_URL}/orders/eventTypes`)

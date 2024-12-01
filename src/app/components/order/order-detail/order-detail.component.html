@@ -1,0 +1,30 @@
+<div class="justify-center min-h-screen">
+  <div class="container max-w-[525px] lg:max-w-5xl px-4">
+    @if (this.orderContext == null) {
+    <p>ORDER CONTEXT IS NULL</p>
+
+    } @else if(this.customerContext == null) {
+    <p>CUSTOMER CONTEXT IIS NULL</p>
+    } @else {
+
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-semibold leading-tight">Customers</h2>
+    </div>
+    <p class="mb-6 text-light-content">
+      VIEWING ORDER ID: {{ this.orderContext.id }}
+    </p>
+    @for(event of eventTypes; track event.id) {
+    <p>{{ event.name }} - {{ event.id }}</p>
+    }
+    <div class="h-7 bg-light-input py-3 my-4">Text</div>
+
+    @for(address of customerAddresses; track address.id) {
+
+    <p>{{ address.id }}</p>
+    <p>{{ address.street1 }}</p>
+    <p>{{ address.dependentLocality }}, {{ address.locale }}</p>
+    <p>{{ address.country }} - {{ address.postalCode }}</p>
+    <div class="mb-3 h-3 p-2">Text</div>
+    } }
+  </div>
+</div>
