@@ -1,0 +1,171 @@
+<div class="justify-center min-h-screen">
+  <div class="container min-h-full max-w-[525px] lg:max-w-5xl p-4 md:p-2">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-semibold leading-tight">Orders</h2>
+      <button
+        (click)="this.router.navigate(['/orders/add'])"
+        class="bg-dark-accent dark:bg-dark-primary text-light-section dark:text-dark-section py-2 px-4 rounded-full flex"
+        [disabled]="isLoading"
+      >
+        New Order
+        <ng-icon class="text-2xl ml-2" name="bootstrapPlusCircle" />
+      </button>
+    </div>
+    @if (isLoading) {
+    <div
+      id="loading-overlay"
+      class="h-screen flex items-center justify-center bg-light-heading bg-opacity-10 z-50 rounded-lg"
+    >
+      <!-- Spinner -->
+      <div
+        class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"
+      ></div>
+    </div>
+    } @else { @if(orders.length == 0) {
+    <div>No Orders</div>
+    } @else {
+    <div
+      class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto dark:text-dark-heading"
+    >
+      <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+          <thead>
+            <tr
+              class="bg-light-section dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
+            >
+              <th
+                class="px-5 max-w-sm py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Id
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Customer
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Event Date
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Event Type
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Status
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Balance
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              ></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(order of orders; track order.id) {
+            <tr
+              class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
+            >
+              <td class="px-5 py-5 text-sm">
+                {{ order.id.substring(0, 7) }}
+              </td>
+              <td class="px-5 py-5 text-sm">
+                {{ getCustomerName(order.billedToCustomerId) }}
+              </td>
+              <td class="px-5 py-5 text-sm">
+                {{ order.eventDate | date : "shortDate" }}
+              </td>
+              <td class="px-5 py-5 text-sm">
+                {{ getEventName(order.eventTypeId) }}
+              </td>
+              <td
+                class="px-5 py-5 text-sm"
+                [ngClass]="{ 'text-light-success': order.currentStatus == 3 }"
+              >
+                {{ order.currentStatus }}
+              </td>
+              <td
+                class="px-5 py-5 text-sm"
+                [ngClass]="{ 'text-light-success': order.currentStatus == 3 }"
+              >
+                {{ order.balanceDue | currency }}
+              </td>
+              <td class="px-5 py-5 text-sm">
+                <div class="flex space-x-2">
+                  <button class="text-blue-500 hover:text-blue-700">
+                    <!-- Replace with ng-icons at some point-->
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button class="text-red-500 hover:text-red-700">
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                    <!-- ^^^^^^ Replace with ng-icons at some point-->
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <!-- <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+              <span class="text-xs xs:text-sm text-gray-900">
+                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to 
+                {{ Math.min(currentPage * itemsPerPage, customers.length) }} of 
+                {{ customers.length }} Entries
+              </span>
+              <div class="inline-flex mt-2 xs:mt-0">
+                <button 
+                  (click)="onPageChange(currentPage - 1)"
+                  [disabled]="currentPage === 1"
+                  class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Prev
+                </button>
+                <button 
+                  (click)="onPageChange(currentPage + 1)"
+                  [disabled]="currentPage * itemsPerPage >= customers.length"
+                  class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div> -->
+      </div>
+    </div>
+    } }
+  </div>
+</div>

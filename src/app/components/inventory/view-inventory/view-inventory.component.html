@@ -12,16 +12,13 @@
     </div>
 
     <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-auto dark:text-dark-heading pb-6"
+      class="grid grid-auto-rows grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 dark:text-dark-heading pb-6"
     >
       @for(category of categories; track category.id) {
       <div
-        class="bg-light-border dark:bg-dark-border shadow-md rounded-lg max-h-fit"
+        class="bg-light-section text-light-heading dark:bg-dark-section dark:text-dark-heading shadow-md rounded-lg max-h-fit overflow-hidden"
       >
-        <div
-          class="flex justify-between bg-light-section text-light-heading dark:bg-dark-section dark:text-dark-heading"
-          (click)="toggleCategory(category.id)"
-        >
+        <div class="flex justify-between" (click)="toggleCategory(category.id)">
           <div class="w-full p-3 font-semibold text-lg cursor-pointer">
             {{ category.name }}
           </div>

@@ -54,6 +54,13 @@ export class CustomerService {
     );
   }
 
+  getCustomer(customerId: string): Observable<Customer> {
+    let requestUrl = `${this.API_URL}/customers/${customerId}`;
+    return this.httpClient.get<Customer>(requestUrl).pipe(
+      map((response) => response),
+      catchError(this.handleError)
+    );
+  }
   createCustomer(data: CustomerCreateRequest) {
     let requestUrl = `${this.API_URL}/customers`;
     let requestBody = JSON.stringify(data);

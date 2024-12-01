@@ -6,6 +6,7 @@ import { AddCustomerComponent } from './components/customer/add-customer/add-cus
 import { CustomerDetailComponent } from './components/customer/customer-detail/customer-detail.component';
 import { ViewInventoryComponent } from './components/inventory/view-inventory/view-inventory.component';
 import { AddInventoryComponent } from './components/inventory/add-inventory/add-inventory.component';
+import { ViewOrdersComponent } from './components/order/view-orders/view-orders.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,22 +19,22 @@ const routes: Routes = [
   {
     path: 'customers/detail',
     component: CustomerDetailComponent,
-    //canActivate: [AuthGuard],
   },
   {
     path: 'customers/add',
     component: AddCustomerComponent,
-    //canActivate: [AuthGuard],
   },
   {
     path: 'inventory',
     component: ViewInventoryComponent,
-    //canActivate: [AuthGuard],
   },
   {
     path: 'inventory/add',
     component: AddInventoryComponent,
-    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'orders',
+    component: ViewOrdersComponent,
   },
 ];
 

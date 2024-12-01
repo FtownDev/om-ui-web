@@ -14,7 +14,7 @@ export class CustomerPageComponent implements OnInit {
   customers: Customer[] = [];
   addresses = [];
   currentPage: any;
-  itemsPerPage: any;
+  itemsPerPage = 50;
   totalCount = 0;
 
   customerService = inject(CustomerService);

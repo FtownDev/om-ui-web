@@ -19,6 +19,7 @@ import { AddCustomerComponent } from './components/customer/add-customer/add-cus
 import { CustomerDetailComponent } from './components/customer/customer-detail/customer-detail.component';
 import { ViewInventoryComponent } from './components/inventory/view-inventory/view-inventory.component';
 import { AddInventoryComponent } from './components/inventory/add-inventory/add-inventory.component';
+import { ViewOrdersComponent } from './components/order/view-orders/view-orders.component';
 
 /* Icons */
 import { NgIconsModule } from '@ng-icons/core';
@@ -36,6 +37,7 @@ import {
   bootstrapPersonSquare,
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
+import { AddOrderComponent } from './components/order/add-order/add-order.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,8 @@ import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/
     CustomerDetailComponent,
     ViewInventoryComponent,
     AddInventoryComponent,
+    ViewOrdersComponent,
+    AddOrderComponent,
   ],
   imports: [
     BrowserModule,

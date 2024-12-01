@@ -19,6 +19,7 @@ export class ViewInventoryComponent implements OnInit {
 
   expandedCategories: { [key: string]: boolean } = {};
 
+  distributedCategories: any[][] = [[], [], []];
   ngOnInit() {
     this.inventoryService
       .getInventoryCategories()
@@ -27,8 +28,15 @@ export class ViewInventoryComponent implements OnInit {
     this.inventoryService
       .getInventoryItems()
       .subscribe((res: InventoryItem[]) => (this.items = res));
+
+    this.distributeCategories();
   }
 
+  distributeCategories() {
+    this.categories.forEach((category, index) => {
+      this.distributedCategories[index % 3].push(category);
+    });
+  }
   toggleCategory(categoryId: string) {
     this.expandedCategories[categoryId] = !this.expandedCategories[categoryId];
   }
