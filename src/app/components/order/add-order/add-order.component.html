@@ -3,18 +3,215 @@
   @if(this.isLoading) {
   <div
     id="loading-overlay"
-    class="h-screen flex items-center justify-center bg-light-heading bg-opacity-10 z-50 rounded-lg"
+    class="h-screen flex items-center justify-center bg-light-heading bg-opacity-10 z-50 rounded-md"
   >
     <div
       class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"
     ></div>
   </div>
-  } @else{ @if(this.customerContext == null) {
+  } @else { @if(this.customerContext == null) {
   <app-select-customer />
-  } @else {
-  <h2 class="text-3xl font-semibold leading-tight">Customer</h2>
-  <p>
-    {{ this.customerContext.firstName }} {{ this.customerContext.lastName }}
-  </p>
-  } }
+  } @else { @if(orderForm != null) {
+  <h2 class="text-3xl font-semibold leading-tight">New Order</h2>
+
+  <form
+    [formGroup]="orderForm"
+    (ngSubmit)="onSubmit()"
+    class="max-w-2xl mx-auto bg-light-fill dark:bg-dark-section p-8 rounded-sm shadow-lg"
+  >
+    <div class="gap-4 mb-4">
+      <div class="flex justify-between">
+        <h2
+          class="text-2xl font-bold mb-6 text-center text-light-heading dark:text-dark-heading"
+        >
+          Order Details
+        </h2>
+
+        <div class="flex flex-col">
+          <div class="flex align-middle">
+            <label
+              for="datepicker"
+              class="text-sm font-medium text-light-heading dark:text-dark-heading whitespace-nowrap align-middle pr-3"
+              >Event Date
+            </label>
+            <input
+              type="date"
+              id="datepicker"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 bg-white"
+            />
+            <div
+              class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+            >
+              <svg
+                class="h-5 w-5 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="flex align-middle">
+            <label
+              for="eventType"
+              class="text-sm font-medium text-light-heading dark:text-dark-heading whitespace-nowrap align-middle pr-3"
+              >Event Type</label
+            >
+            <select
+              id="country"
+              class="form-input rounded-md appearance-auto"
+              (change)="onEventTypeChange($event.target)"
+              [ngClass]="{
+                'border-light-error':
+                  f['eventTypeId']!.invalid && f['eventTypeId']!.touched
+              }"
+            >
+              <option value="">Select a Country</option>
+              @for (event of eventTypes; track event.id) {
+              <option [value]="event.id">{{ event.name }}</option>
+              }
+            </select>
+            <p
+              *ngIf="f['eventTypeId']!.invalid && f['eventTypeId']!.touched"
+              class="text-light-error dark:text-dark-error text-xs mt-1"
+            >
+              Event Type is required
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="w-1/2">
+        <label
+          for="customer"
+          class="block text-md font-medium text-light-heading dark:text-dark-heading pl-3"
+          >Bill To:
+        </label>
+        <div
+          class="p-4 border-[1px] rounded bg-light-fill border-light-content"
+        >
+          <p class="text-sm text-light-content">
+            {{
+              this.customerContext.firstName +
+                " " +
+                this.customerContext.lastName
+            }}
+          </p>
+          <p class="text-sm text-light-content">
+            {{ this.getAddressLine1(this.customerContext.billingAddressId) }}
+          </p>
+          <p class="text-sm text-light-content">
+            {{ this.getAddressLine2(this.customerContext.billingAddressId) }}
+          </p>
+          <p class="text-sm text-light-content">
+            {{ this.getAddressLine3(this.customerContext.billingAddressId) }}
+          </p>
+        </div>
+      </div>
+
+      <!-- <div class="col-span-6">
+        <label
+          for="lastName"
+          class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+          >Last Name *</label
+        >
+        <input
+          type="text"
+          id="lastName"
+          formControlName="lastName"
+          class="form-input"
+          [ngClass]="{
+            'border-red-500': f['lastName'].invalid && f['lastName'].touched
+          }"
+        />
+        <p
+          *ngIf="f['lastName'].invalid && f['lastName'].touched"
+          class="text-light-error dark:text-dark-error text-xs mt-1"
+        >
+          Last Name is required
+        </p>
+      </div>
+
+      <div class="flex col-span-12 gap-4 mb-4">
+        <div class="col-span-4">
+          <label
+            for="email"
+            class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+            >Email *</label
+          >
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-input"
+            [ngClass]="{
+              'border-red-500': f['email'].invalid && f['email'].touched
+            }"
+          />
+          <p
+            *ngIf="f['email'].invalid && f['email'].touched"
+            class="text-light-error dark:text-dark-error text-xs mt-1"
+          >
+            Valid Email is required
+          </p>
+        </div>
+
+        <div class="col-span-4">
+          <label
+            for="primaryPhone"
+            class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+            >Primary Phone *</label
+          >
+          <input
+            type="tel"
+            id="primaryPhone"
+            formControlName="primaryPhone"
+            class="form-input"
+            [ngClass]="{
+              'border-red-500':
+                f['primaryPhone'].invalid && f['primaryPhone'].touched
+            }"
+          />
+          <p
+            *ngIf="f['primaryPhone'].invalid && f['primaryPhone'].touched"
+            class="text-light-error dark:text-dark-error text-xs mt-1"
+          >
+            Valid 10-digit phone number is required
+          </p>
+        </div>
+
+        <div class="col-span-2">
+          <label
+            for="ext"
+            class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+            >Ext</label
+          >
+          <input
+            type="text"
+            id="ext"
+            formControlName="ext"
+            class="form-input"
+          />
+        </div>
+      </div>
+
+      <div class="col-span-4">
+        <label
+          for="secondaryPhone"
+          class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+          >Secondary Phone</label
+        >
+        <input
+          type="tel"
+          id="secondaryPhone"
+          formControlName="secondaryPhone"
+          class="form-input"
+        />
+      </div> -->
+    </div>
+  </form>
+  } }}
 </div>

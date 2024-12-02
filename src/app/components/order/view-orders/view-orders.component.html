@@ -75,7 +75,7 @@
               class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
             >
               <td class="px-5 py-5 text-sm">
-                {{ order.id.substring(0, 7) }}
+                {{ order.id!.substring(0, 7) }}
               </td>
               <td class="px-5 py-5 text-sm">
                 {{ getCustomerName(order.billedToCustomerId) }}

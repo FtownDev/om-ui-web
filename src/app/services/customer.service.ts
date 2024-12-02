@@ -12,6 +12,7 @@ import { CustomerCreateRequest } from '../models/Customer/CustomerCreateRequest'
 import { Country } from '../models/Address/Country';
 import { Customer } from '../models/Customer/Customer';
 import { Address } from '../models/Address/Address';
+import { AddressRetreiveResponse } from '../models/Address/AddressRetrieveResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +35,7 @@ export class CustomerService {
   setCustomerContext(value: Customer) {
     this.customerContext.next(value);
     this.getAddresses(value.id).subscribe((res) => {
+      console.log('Customer Service setting address context: ', res);
       this.setaddressContext(res);
     });
   }
@@ -89,8 +91,8 @@ export class CustomerService {
 
   getAddresses(customerId: string): Observable<Address[]> {
     let requestUrl = `${this.API_URL}/customers/${customerId}/address`;
-    return this.httpClient.get<Address[]>(requestUrl).pipe(
-      map((response) => response),
+    return this.httpClient.get<AddressRetreiveResponse>(requestUrl).pipe(
+      map((response) => response.shippingAddresses),
       catchError(this.handleError)
     );
   }
