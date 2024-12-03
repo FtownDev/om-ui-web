@@ -30,7 +30,6 @@ export class ViewOrdersComponent implements OnInit {
     this.orderService
       .getOrders(this.itemsPerPage, this.totalCount)
       .subscribe((res) => {
-        console.log(res);
         this.orders = res.orders;
         this.itemsPerPage = res.pageSize;
         this.totalCount += res.pageSize;

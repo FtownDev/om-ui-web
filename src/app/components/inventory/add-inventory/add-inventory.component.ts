@@ -73,8 +73,6 @@ export class AddInventoryComponent implements OnInit {
       const path = this.itemForm.get('categoryId')!.value;
       this.inventoryService.createInventoryItem(data, path).subscribe({
         next: (response) => {
-          console.log('Item created successfully', response);
-
           this.router.navigate(['/inventory']);
           this.sendingData = false;
         },
@@ -92,7 +90,6 @@ export class AddInventoryComponent implements OnInit {
       const data: InventoryCategoryCreateRequest = this.categoryForm.value;
       this.inventoryService.createInventoryCategory(data).subscribe({
         next: (response) => {
-          console.log('Category created successfully', response);
           this.sendingData = false;
           this.categoryForm!.reset();
           this.resetCategories();

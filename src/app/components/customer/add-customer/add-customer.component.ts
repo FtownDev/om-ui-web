@@ -71,8 +71,6 @@ export class AddCustomerComponent implements OnInit {
 
       this.customerService.createCustomer(customerData).subscribe({
         next: (response) => {
-          console.log('Customer created successfully', response);
-
           this.customerService.setCustomerContext(response);
 
           this.router.navigate(['/customers/detail']);

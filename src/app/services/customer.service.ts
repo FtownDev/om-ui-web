@@ -35,7 +35,6 @@ export class CustomerService {
   setCustomerContext(value: Customer) {
     this.customerContext.next(value);
     this.getAddresses(value.id).subscribe((res) => {
-      console.log('Customer Service setting address context: ', res);
       this.setaddressContext(res);
     });
   }

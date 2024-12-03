@@ -16,7 +16,6 @@
 
   <form
     [formGroup]="orderForm"
-    (ngSubmit)="onSubmit()"
     class="max-w-2xl mx-auto bg-light-fill dark:bg-dark-section p-8 rounded-sm shadow-lg"
   >
     <div class="gap-4">
@@ -27,17 +26,19 @@
           Order Details
         </h2>
 
-        <div class="flex flex-col">
+        <div class="flex flex-col gap-2">
           <div class="flex align-middle">
-            <label
-              for="datepicker"
-              class="text-sm font-medium text-light-heading dark:text-dark-heading whitespace-nowrap align-middle pr-3"
-              >Event Date
-            </label>
+            <div class="align-middle">
+              <label
+                for="datepicker"
+                class="text-sm font-medium text-light-heading dark:text-dark-heading whitespace-nowrap align-middle pr-3"
+                >Event Date
+              </label>
+            </div>
             <input
               type="date"
               id="datepicker"
-              class="form-input rounded-sm appearance-auto"
+              class="form-input rounded-sm appearance-auto pr-2"
             />
             <div
               class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
@@ -63,7 +64,7 @@
             >
             <select
               id="country"
-              class="form-input rounded-sm appearance-auto"
+              class="form-input rounded-sm appearance-auto pr-2"
               (change)="onEventTypeChange($event.target)"
               [ngClass]="{
                 'border-light-error':
@@ -144,24 +145,24 @@
                   selectedShippingAddress.postalCode
               }}
             </p>
-            <p class="text-sm">{{ " " }}</p>
+            <a (click)="selectedShippingAddress = null"
+              ><p class="text-sm text-light-primary underline cursor-pointer">
+                Change
+              </p>
+            </a>
+
             } @else {
-            <div class="flex align-middle">
-              <label
-                for="selectedShippingAddress"
-                class="text-sm font-medium text-light-heading dark:text-dark-heading whitespace-nowrap align-middle pr-3"
-                >Address:
-              </label>
+            <div class="flex align-middle mb-10">
               <select
                 id="selectedShippingAddress"
                 class="form-input rounded-sm appearance-auto"
                 (change)="onShippingAddressChange($event.target)"
               >
-                <option value="">Shipping Address</option>
+                <option value="">Choose Address:</option>
                 @for (address of addressContext; track address.id) {
                 <option [value]="address.id">
-                  {{ address.street1 }} + {{ " " }} {{ address.street2 }} +
-                  {{ "- " }} + {{ address.dependentLocality }}
+                  {{ address.street1 }} {{ " " }} {{ address.street2 }}
+                  {{ "- " }} {{ address.dependentLocality }}
                 </option>
                 }
               </select>
@@ -170,6 +171,41 @@
           </div>
         </div>
       </div>
+      @if(specifyDeliverTimes) {
+      <div class="flex w-full p-5">
+        @if(deliveryWindowForm != null) {
+        <form [formGroup]="deliveryWindowForm" class="w-full flex">
+          StartTime
+          <input
+            type="date"
+            id="deliveryWindowStart"
+            formControlName="startTime"
+            class="w-1/3 form-input rounded-sm appearance-auto pr-2"
+          />
+          EndTime
+          <input
+            type="date"
+            id="deliveryWindowStart"
+            formControlName="endTime"
+            class="w-1/3 ml-3 form-input rounded-sm appearance-auto pr-2"
+          />
+        </form>
+        }
+      </div>
+      <button
+        class="p-3 rounded-lg bg-dark-input mt-5 text-light-accent"
+        (click)="logData()"
+      >
+        Add Times
+      </button>
+      } @else {
+      <button
+        class="p-3 rounded-lg bg-dark-input mt-5 text-light-accent"
+        (click)="specifyDeliverTimes = true"
+      >
+        Add Times
+      </button>
+      }
 
       <!-- <div class="col-span-6">
         <label

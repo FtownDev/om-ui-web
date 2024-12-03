@@ -6,7 +6,7 @@ import { CustomerService } from '@/src/app/services/customer.service';
 import { OrderService } from '@/src/app/services/order.service';
 import { Component, inject, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrderItem } from '@/src/app/models/Order/OrderItem';
 
 @Component({
@@ -18,6 +18,7 @@ import { OrderItem } from '@/src/app/models/Order/OrderItem';
 })
 export class AddOrderComponent implements OnInit {
   isLoading: Boolean = false;
+  specifyDeliverTimes: Boolean = false;
   private destroy$ = new Subject<void>();
   orderContext: Order | null = null;
   orderService = inject(OrderService);
@@ -29,6 +30,7 @@ export class AddOrderComponent implements OnInit {
 
   orderForm: FormGroup<any> | undefined;
   itemsForm: FormGroup<any> | undefined;
+  deliveryWindowForm: FormGroup<any> | undefined;
   orderItems: OrderItem[] = [];
 
   selectedShippingAddress: Address | null = null;
@@ -50,6 +52,11 @@ export class AddOrderComponent implements OnInit {
       paymentTerms: ['', Validators.required],
     });
 
+    this.deliveryWindowForm = this.fb.group({
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
+    });
+
     this.customerService.customerContext$
       .pipe(takeUntil(this.destroy$))
       .subscribe((val) => {
@@ -64,7 +71,6 @@ export class AddOrderComponent implements OnInit {
     this.customerService.addressContext$
       .pipe(takeUntil(this.destroy$))
       .subscribe((val) => {
-        console.log('Add ORder component got new address context: ', val);
         this.addressContext = val;
       });
 
@@ -76,6 +82,14 @@ export class AddOrderComponent implements OnInit {
 
   get f() {
     return this.orderForm!.controls;
+  }
+
+  get d() {
+    return this.deliveryWindowForm!.controls;
+  }
+
+  logData() {
+    console.log(this.deliveryWindowForm?.value);
   }
 
   onShippingAddressChange(event: any) {
