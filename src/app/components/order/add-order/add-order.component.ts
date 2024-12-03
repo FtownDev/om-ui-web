@@ -31,6 +31,8 @@ export class AddOrderComponent implements OnInit {
   itemsForm: FormGroup<any> | undefined;
   orderItems: OrderItem[] = [];
 
+  selectedShippingAddress: Address | null = null;
+
   ngOnInit(): void {
     this.orderForm = this.fb.group({
       eventDate: ['', Validators.required],
@@ -76,6 +78,12 @@ export class AddOrderComponent implements OnInit {
     return this.orderForm!.controls;
   }
 
+  onShippingAddressChange(event: any) {
+    const address = this.addressContext?.find((a) => a.id == event.value);
+    if (address) {
+      this.selectedShippingAddress = address;
+    }
+  }
   onEventTypeChange(event: any) {
     const selectedEvent = this.eventTypes.find((c) => c.id == event.value);
     if (selectedEvent) {

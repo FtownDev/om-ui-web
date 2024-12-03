@@ -19,7 +19,7 @@
     (ngSubmit)="onSubmit()"
     class="max-w-2xl mx-auto bg-light-fill dark:bg-dark-section p-8 rounded-sm shadow-lg"
   >
-    <div class="gap-4 mb-4">
+    <div class="gap-4">
       <div class="flex justify-between">
         <h2
           class="text-2xl font-bold mb-6 text-center text-light-heading dark:text-dark-heading"
@@ -37,7 +37,7 @@
             <input
               type="date"
               id="datepicker"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 bg-white"
+              class="form-input rounded-sm appearance-auto"
             />
             <div
               class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
@@ -63,7 +63,7 @@
             >
             <select
               id="country"
-              class="form-input rounded-md appearance-auto"
+              class="form-input rounded-sm appearance-auto"
               (change)="onEventTypeChange($event.target)"
               [ngClass]="{
                 'border-light-error':
@@ -84,31 +84,90 @@
           </div>
         </div>
       </div>
-      <div class="w-1/2">
-        <label
-          for="customer"
-          class="block text-md font-medium text-light-heading dark:text-dark-heading pl-3"
-          >Bill To:
-        </label>
-        <div
-          class="p-4 border-[1px] rounded bg-light-fill border-light-content"
-        >
-          <p class="text-sm text-light-content">
-            {{
-              this.customerContext.firstName +
-                " " +
-                this.customerContext.lastName
-            }}
-          </p>
-          <p class="text-sm text-light-content">
-            {{ this.getAddressLine1(this.customerContext.billingAddressId) }}
-          </p>
-          <p class="text-sm text-light-content">
-            {{ this.getAddressLine2(this.customerContext.billingAddressId) }}
-          </p>
-          <p class="text-sm text-light-content">
-            {{ this.getAddressLine3(this.customerContext.billingAddressId) }}
-          </p>
+      <div class="flex items-stretch gap-7">
+        <div class="flex-col flex-1 w-1/2">
+          <label
+            for="customer"
+            class="block text-md font-medium text-light-heading dark:text-dark-heading pl-3"
+            >Bill To:
+          </label>
+          <div
+            class="p-4 border-[1px] rounded bg-light-fill border-light-content"
+          >
+            <p class="text-sm text-light-content">
+              {{
+                this.customerContext.firstName +
+                  " " +
+                  this.customerContext.lastName
+              }}
+            </p>
+            <p class="text-sm text-light-content">
+              {{ this.getAddressLine1(this.customerContext.billingAddressId) }}
+            </p>
+            <p class="text-sm text-light-content">
+              {{ this.getAddressLine2(this.customerContext.billingAddressId) }}
+            </p>
+            <p class="text-sm text-light-content">
+              {{ this.getAddressLine3(this.customerContext.billingAddressId) }}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex-col flex-1 w-1/2">
+          <label
+            for="customer"
+            class="block text-md font-medium text-light-heading dark:text-dark-heading pl-3"
+            >Ship To:
+          </label>
+          <div
+            class="flex-1 p-4 border-[1px] rounded bg-light-fill border-light-content"
+          >
+            @if(selectedShippingAddress) {
+            <p class="text-sm text-light-content">
+              {{
+                selectedShippingAddress.street1 +
+                  " " +
+                  selectedShippingAddress.street2
+              }}
+            </p>
+            <p class="text-sm text-light-content">
+              {{
+                selectedShippingAddress.dependentLocality +
+                  ", " +
+                  selectedShippingAddress.locale
+              }}
+            </p>
+            <p class="text-sm text-light-content">
+              {{
+                selectedShippingAddress.country +
+                  " - " +
+                  selectedShippingAddress.postalCode
+              }}
+            </p>
+            <p class="text-sm">{{ " " }}</p>
+            } @else {
+            <div class="flex align-middle">
+              <label
+                for="selectedShippingAddress"
+                class="text-sm font-medium text-light-heading dark:text-dark-heading whitespace-nowrap align-middle pr-3"
+                >Address:
+              </label>
+              <select
+                id="selectedShippingAddress"
+                class="form-input rounded-sm appearance-auto"
+                (change)="onShippingAddressChange($event.target)"
+              >
+                <option value="">Shipping Address</option>
+                @for (address of addressContext; track address.id) {
+                <option [value]="address.id">
+                  {{ address.street1 }} + {{ " " }} {{ address.street2 }} +
+                  {{ "- " }} + {{ address.dependentLocality }}
+                </option>
+                }
+              </select>
+            </div>
+            }
+          </div>
         </div>
       </div>
 
