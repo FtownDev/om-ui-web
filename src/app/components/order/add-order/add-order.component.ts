@@ -19,6 +19,10 @@ import { OrderItem } from '@/src/app/models/Order/OrderItem';
 export class AddOrderComponent implements OnInit {
   isLoading: Boolean = false;
   specifyDeliverTimes: Boolean = false;
+  showDeliveryModal: Boolean = false;
+  tempDeliveryTimes: string[][] = [];
+  showPickupModal: Boolean = false;
+  tempPickupTimes: string[][] = [];
   private destroy$ = new Subject<void>();
   orderContext: Order | null = null;
   orderService = inject(OrderService);
@@ -30,7 +34,7 @@ export class AddOrderComponent implements OnInit {
 
   orderForm: FormGroup<any> | undefined;
   itemsForm: FormGroup<any> | undefined;
-  deliveryWindowForm: FormGroup<any> | undefined;
+  deliveryWindowForm: FormGroup | undefined;
   orderItems: OrderItem[] = [];
 
   selectedShippingAddress: Address | null = null;
@@ -88,8 +92,13 @@ export class AddOrderComponent implements OnInit {
     return this.deliveryWindowForm!.controls;
   }
 
-  logData() {
-    console.log(this.deliveryWindowForm?.value);
+  addDeliveryWindow() {
+    if (this.deliveryWindowForm?.valid) {
+      const formVal = this.deliveryWindowForm!.value;
+      const newVal = [formVal.startTime, formVal.endTime];
+      this.tempDeliveryTimes.push(newVal);
+      this.showDeliveryModal = false;
+    }
   }
 
   onShippingAddressChange(event: any) {
@@ -133,6 +142,12 @@ export class AddOrderComponent implements OnInit {
   }
 
   onSubmit() {
+    this.orderForm
+      ?.get('deliveryWindow')
+      ?.setValue(this.tempDeliveryTimes.toString());
+    this.orderForm
+      ?.get('pickupWindow')
+      ?.setValue(this.tempDeliveryTimes.toString());
     console.log('orderForm: ', this.orderForm?.value);
   }
 
