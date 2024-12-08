@@ -11,6 +11,9 @@ import { OrderItem } from '@/src/app/models/Order/OrderItem';
 import { InventoryService } from '@/src/app/services/inventory.service';
 import { InventoryCategory } from '@/src/app/models/Inventory/InventoryCategory';
 import { InventoryItem } from '@/src/app/models/Inventory/InventoryItem';
+import { PaymentTerms } from '@/src/app/models/Order/PaymentTerms';
+import { TaxRates } from '@/src/app/models/Order/TaxRates';
+import { ShippingRates } from '@/src/app/models/Order/ShippingRates';
 
 @Component({
   selector: 'app-add-order',
@@ -36,6 +39,13 @@ export class AddOrderComponent implements OnInit {
   eventTypes: EventType[] = [];
   addressContext: Address[] | null = [];
   fb = inject(FormBuilder);
+  orderSubTotal: number = 0;
+
+  paymentTerms: any;
+  taxRates = TaxRates;
+  shippingRates = ShippingRates;
+
+  selectedShippingRate: any;
 
   // Technical debt item, accidently made OrderItem need an OrderId on the create request, but order Id doesnt exist until after creation
   // Will not affect anything because on the backend this value gets overwritten with the actual ID
@@ -61,7 +71,7 @@ export class AddOrderComponent implements OnInit {
       billedToCustomerId: [, Validators.required],
       billedToAddressId: ['', Validators.required],
       shippedToAddressId: ['', Validators.required],
-      amount: ['', Validators.required],
+      amount: [''],
       balanceDue: [''],
       taxRate: ['', Validators.required],
       deliveryWindow: [''],
@@ -115,6 +125,13 @@ export class AddOrderComponent implements OnInit {
     this.iventroryService.getInventoryItems().subscribe((res) => {
       this.items = res;
     });
+
+    this.paymentTerms = Object.keys(PaymentTerms)
+      .filter((key) => isNaN(Number(key))) // Filter out reverse mappings
+      .map((key) => ({
+        value: PaymentTerms[key as keyof typeof PaymentTerms],
+        label: key,
+      }));
   }
 
   get f() {
@@ -172,7 +189,8 @@ export class AddOrderComponent implements OnInit {
         orderId: this.orderId_temp,
       };
 
-      console.log('newItem', newItem);
+      this.orderSubTotal +=
+        this.items.find((f) => f.id == formVal.itemId)!.price * formVal.qty;
       this.orderItems.push(newItem);
       this.orderItemForm?.reset({ itemId: '', categoryId: '', qty: '' });
     }
@@ -222,6 +240,10 @@ export class AddOrderComponent implements OnInit {
     }
   }
 
+  onEventDateChange(event: any) {
+    this.orderForm!.get('eventDate')!.setValue(event.value);
+  }
+
   getAddressLine1(id: string) {
     const address = this.addressContext?.find((a) => a.id == id);
     if (address) {
@@ -252,20 +274,30 @@ export class AddOrderComponent implements OnInit {
   onSubmit() {
     this.orderForm
       ?.get('deliveryWindow')
-      ?.setValue(this.tempDeliveryTimes.toString());
+      ?.setValue(JSON.stringify(this.tempDeliveryTimes));
     this.orderForm
       ?.get('pickupWindow')
-      ?.setValue(this.tempDeliveryTimes.toString());
+      ?.setValue(JSON.stringify(this.tempPickupTimes));
+    this.orderForm?.get('amount')?.setValue(this.orderSubTotal);
     console.log('orderForm: ', this.orderForm?.value);
   }
 
   logData() {
     this.orderForm
       ?.get('deliveryWindow')
-      ?.setValue(this.tempDeliveryTimes.toString());
+      ?.setValue(JSON.stringify(this.tempDeliveryTimes));
     this.orderForm
       ?.get('pickupWindow')
-      ?.setValue(this.tempDeliveryTimes.toString());
+      ?.setValue(JSON.stringify(this.tempPickupTimes));
+
+    const total: Number = Number(
+      (
+        (this.orderSubTotal + this.shippingRates[3]) *
+        this.orderForm?.get('taxRate')?.value
+      ).toFixed(2)
+    );
+    this.orderForm?.get('amount')?.setValue(total);
+    this.orderForm?.get('balanceDue')?.setValue(total);
     console.log('orderForm: ', this.orderForm?.value);
   }
 
