@@ -14,6 +14,7 @@ import { InventoryItem } from '@/src/app/models/Inventory/InventoryItem';
 import { PaymentTerms } from '@/src/app/models/Order/PaymentTerms';
 import { TaxRates } from '@/src/app/models/Order/TaxRates';
 import { ShippingRates } from '@/src/app/models/Order/ShippingRates';
+import { OrderCreateRequest } from '@/src/app/models/Order/OrderCreateRequest';
 
 @Component({
   selector: 'app-add-order',
@@ -73,17 +74,15 @@ export class AddOrderComponent implements OnInit {
       shippedToAddressId: ['', Validators.required],
       amount: [''],
       balanceDue: [''],
-      taxRate: ['', Validators.required],
-      deliveryWindow: [''],
-      pickupWindow: [''],
+      taxRate: [0.0, Validators.required],
       deliveryPickupNotes: [''],
-      discount: [''],
-      paymentTerms: ['', Validators.required],
+      discount: [0],
+      paymentTerms: [0, Validators.required],
     });
 
     this.deliveryWindowForm = this.fb.group({
-      startTime: ['', Validators.required],
-      endTime: ['', Validators.required],
+      startTime: [new Date(), Validators.required],
+      endTime: [new Date(), Validators.required],
     });
     this.pickupWindowForm = this.fb.group({
       startTime: ['', Validators.required],
@@ -182,7 +181,6 @@ export class AddOrderComponent implements OnInit {
   addOrderItem() {
     if (this.orderItemForm!.valid) {
       const formVal = this.orderItemForm!.value;
-      console.log(formVal);
       const newItem: OrderItem = {
         itemId: formVal.itemId,
         qty: formVal.qty,
@@ -199,7 +197,10 @@ export class AddOrderComponent implements OnInit {
   addDeliveryWindow() {
     if (this.deliveryWindowForm?.valid) {
       const formVal = this.deliveryWindowForm!.value;
-      const newVal = [formVal.startTime, formVal.endTime];
+      const newVal = [
+        new Date(formVal.startTime).toISOString(),
+        new Date(formVal.endTime).toISOString(),
+      ];
       this.tempDeliveryTimes.push(newVal);
       this.showDeliveryModal = false;
       this.deliveryWindowForm.reset();
@@ -214,7 +215,10 @@ export class AddOrderComponent implements OnInit {
   addPickupWindow() {
     if (this.pickupWindowForm?.valid) {
       const formVal = this.pickupWindowForm!.value;
-      const newVal = [formVal.startTime, formVal.endTime];
+      const newVal = [
+        new Date(formVal.startTime).toISOString(),
+        new Date(formVal.endTime).toISOString(),
+      ];
       this.tempPickupTimes.push(newVal);
       this.showPickupModal = false;
       this.pickupWindowForm.reset();
@@ -241,7 +245,9 @@ export class AddOrderComponent implements OnInit {
   }
 
   onEventDateChange(event: any) {
-    this.orderForm!.get('eventDate')!.setValue(event.value);
+    this.orderForm!.get('eventDate')!.setValue(
+      new Date(event.value).toISOString()
+    );
   }
 
   getAddressLine1(id: string) {
@@ -272,33 +278,41 @@ export class AddOrderComponent implements OnInit {
   }
 
   onSubmit() {
-    this.orderForm
-      ?.get('deliveryWindow')
-      ?.setValue(JSON.stringify(this.tempDeliveryTimes));
-    this.orderForm
-      ?.get('pickupWindow')
-      ?.setValue(JSON.stringify(this.tempPickupTimes));
-    this.orderForm?.get('amount')?.setValue(this.orderSubTotal);
-    console.log('orderForm: ', this.orderForm?.value);
-  }
-
-  logData() {
-    this.orderForm
-      ?.get('deliveryWindow')
-      ?.setValue(JSON.stringify(this.tempDeliveryTimes));
-    this.orderForm
-      ?.get('pickupWindow')
-      ?.setValue(JSON.stringify(this.tempPickupTimes));
-
-    const total: Number = Number(
+    const tax: number = Number(
       (
         (this.orderSubTotal + this.shippingRates[3]) *
         this.orderForm?.get('taxRate')?.value
       ).toFixed(2)
     );
-    this.orderForm?.get('amount')?.setValue(total);
-    this.orderForm?.get('balanceDue')?.setValue(total);
-    console.log('orderForm: ', this.orderForm?.value);
+
+    const a: number = Number(
+      (this.orderSubTotal + this.shippingRates[3] + tax).toFixed(2)
+    );
+    this.orderForm?.get('amount')?.setValue(a);
+    this.orderForm?.get('balanceDue')?.setValue(a);
+
+    const p: number = Number(
+      parseFloat(this.orderForm?.get('paymentTerms')?.value).toFixed(2)
+    );
+
+    this.orderForm?.get('paymentTerms')?.setValue(p);
+
+    const t: number = Number(
+      parseFloat(this.orderForm?.get('taxRate')?.value).toFixed(2)
+    );
+    this.orderForm?.get('taxRate')?.setValue(t);
+
+    const requestData: OrderCreateRequest = {
+      order: this.orderForm!.value,
+      orderItems: this.orderItems,
+    };
+
+    requestData.order.deliveryWindow = this.tempDeliveryTimes;
+    requestData.order.pickupWindow = this.tempPickupTimes;
+
+    this.orderService
+      .createOrder(requestData)
+      .subscribe((res) => console.log(res));
   }
 
   ngOnDestroy() {

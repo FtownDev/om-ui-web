@@ -13,8 +13,8 @@ export interface Order {
   amount: number;
   balanceDue: number;
   taxRate: number;
-  deliveryWindow?: Date[][];
-  pickupWindow?: Date[][];
+  deliveryWindow?: string[][];
+  pickupWindow?: string[][];
   deliveryPickupNotes?: string;
   deposit?: number;
   discount?: number;

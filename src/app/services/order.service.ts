@@ -9,6 +9,7 @@ import { environment } from '@/src/environments/environment.development';
 import { OrderRetrieveResponse } from '../models/Order/OrderRetrieveResponse';
 import { EventType } from '../models/Order/EventType';
 import { Order } from '../models/Order/Order';
+import { OrderCreateRequest } from '../models/Order/OrderCreateRequest';
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +43,18 @@ export class OrderService {
 
   getEventsContext(): EventType[] | null {
     return this.eventTypesContext.getValue();
+  }
+
+  createOrder(data: OrderCreateRequest) {
+    let requestUrl = `${this.API_URL}/orders`;
+    let requestBody = JSON.stringify(data);
+    console.log(requestBody);
+    return this.httpClient
+      .post<Order>(requestUrl, requestBody, this.httpOptions)
+      .pipe(
+        map((response) => response),
+        catchError(this.handleError)
+      );
   }
 
   getOrders(
