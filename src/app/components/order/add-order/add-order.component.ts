@@ -81,6 +81,7 @@ export class AddOrderComponent implements OnInit {
     });
 
     this.orderItemForm = this.fb.group({
+      categoryId: ['', Validators.required],
       itemId: ['', Validators.required],
       qty: [''],
     });
@@ -147,6 +148,7 @@ export class AddOrderComponent implements OnInit {
   onItemCategoryChange(event: any) {
     const category = this.itemCategories?.find((c) => c.id == event.value);
     if (category) {
+      this.orderItemForm!.get('categoryId')!.setValue(category.id);
       this.filteredItems = this.items.filter(
         (i) => i.categoryId == category.id
       );
@@ -172,7 +174,7 @@ export class AddOrderComponent implements OnInit {
 
       console.log('newItem', newItem);
       this.orderItems.push(newItem);
-      this.orderItemForm?.reset();
+      this.orderItemForm?.reset({ itemId: '', categoryId: '', qty: '' });
     }
   }
 
@@ -210,6 +212,7 @@ export class AddOrderComponent implements OnInit {
     const address = this.addressContext?.find((a) => a.id == event.value);
     if (address) {
       this.selectedShippingAddress = address;
+      this.orderForm!.get('shippedToAddressId')!.setValue(address.id);
     }
   }
   onEventTypeChange(event: any) {
@@ -247,6 +250,16 @@ export class AddOrderComponent implements OnInit {
   }
 
   onSubmit() {
+    this.orderForm
+      ?.get('deliveryWindow')
+      ?.setValue(this.tempDeliveryTimes.toString());
+    this.orderForm
+      ?.get('pickupWindow')
+      ?.setValue(this.tempDeliveryTimes.toString());
+    console.log('orderForm: ', this.orderForm?.value);
+  }
+
+  logData() {
     this.orderForm
       ?.get('deliveryWindow')
       ?.setValue(this.tempDeliveryTimes.toString());
