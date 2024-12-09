@@ -10,6 +10,7 @@ import { OrderRetrieveResponse } from '../models/Order/OrderRetrieveResponse';
 import { EventType } from '../models/Order/EventType';
 import { Order } from '../models/Order/Order';
 import { OrderCreateRequest } from '../models/Order/OrderCreateRequest';
+import { OrderItem } from '../models/Order/OrderItem';
 
 @Injectable({
   providedIn: 'root',
@@ -74,6 +75,15 @@ export class OrderService {
   getEventTypes(): Observable<EventType[]> {
     return this.httpClient
       .get<EventType[]>(`${this.API_URL}/orders/eventTypes`)
+      .pipe(
+        map((response) => response),
+        catchError(this.handleError)
+      );
+  }
+
+  getOrderItems(orderId: string | undefined): Observable<OrderItem[]> {
+    return this.httpClient
+      .get<OrderItem[]>(`${this.API_URL}/orders/${orderId}/items`)
       .pipe(
         map((response) => response),
         catchError(this.handleError)

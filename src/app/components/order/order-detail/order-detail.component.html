@@ -1,5 +1,5 @@
 <div class="justify-center min-h-screen">
-  <div class="container max-w-[525px] lg:max-w-5xl px-4">
+  <div class="container min-h-full max-w-[525px] lg:max-w-6xl p-4 md:p-2">
     @if (this.orderContext == null) {
     <p>ORDER CONTEXT IS NULL</p>
 
@@ -7,24 +7,277 @@
     <p>CUSTOMER CONTEXT IIS NULL</p>
     } @else {
 
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-3xl font-semibold leading-tight">Customers</h2>
+    <div
+      class="max-w-2xl mx-auto bg-light-fill dark:bg-dark-section p-8 rounded-sm shadow-lg"
+    >
+      <div class="flex justify-between">
+        <h2
+          class="text-2xl font-bold mb-6 text-center text-light-heading dark:text-dark-heading"
+        >
+          Order #{{ this.orderContext.id!.substring(0, 7) }}
+        </h2>
+
+        <div class="flex flex-col gap-2">
+          <div class="flex align-middle">
+            <div class="align-middle">
+              <label
+                for="datepicker"
+                class="text-sm font-medium text-light-heading dark:text-dark-heading whitespace-nowrap align-middle pr-3"
+                >Event Date
+              </label>
+            </div>
+            <input
+              type="text"
+              id="datepicker"
+              class="form-input rounded-sm appearance-auto pr-2 disabled:font-semibold disabled:text-light-content"
+              [disabled]="true"
+              [value]="this.orderContext.eventDate | date : 'EE. MMM dd, yyyy'"
+            />
+          </div>
+          <div class="flex align-middle">
+            <label
+              for="eventType"
+              class="text-sm font-medium text-light-heading dark:text-dark-heading whitespace-nowrap align-middle pr-3"
+              >Event Type</label
+            >
+            <input
+              type="text"
+              id="country"
+              class="form-input rounded-sm appearance-auto pr-2 disabled:font-semibold disabled:text-light-content"
+              [disabled]="true"
+              [value]="getEventName(this.orderContext.eventTypeId)"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-stretch gap-7">
+        <div class="flex-col flex-1 w-1/2">
+          <label
+            for="customer"
+            class="block text-md font-medium text-light-heading dark:text-dark-heading pl-3"
+            >Bill To:
+          </label>
+          <div
+            class="p-4 border-[1px] rounded bg-light-fill border-light-content dark:bg-dark-input dark:border-dark-heading"
+          >
+            <p class="text-sm text-light-content dark:text-dark-content">
+              {{
+                this.customerContext.firstName +
+                  " " +
+                  this.customerContext.lastName
+              }}
+            </p>
+            <p class="text-sm text-light-content dark:text-dark-content">
+              {{ this.getAddressLine1(this.customerContext.billingAddressId) }}
+            </p>
+            <p class="text-sm text-light-content dark:text-dark-content">
+              {{ this.getAddressLine2(this.customerContext.billingAddressId) }}
+            </p>
+            <p class="text-sm text-light-content dark:text-dark-content">
+              {{ this.getAddressLine3(this.customerContext.billingAddressId) }}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex-col flex-1 w-1/2">
+          <label
+            for="customer"
+            class="block text-md font-medium text-light-heading dark:text-dark-heading pl-3"
+            >Ship To:
+          </label>
+          <div
+            class="flex-1 p-4 border-[1px] rounded bg-light-fill border-light-content dark:bg-dark-input dark:border-dark-heading"
+          >
+            <p class="text-sm text-light-content dark:text-dark-content">
+              {{ this.getAddressLine1(this.orderContext.shippedToAddressId) }}
+            </p>
+            <p class="text-sm text-light-content dark:text-dark-content">
+              {{ this.getAddressLine2(this.orderContext.shippedToAddressId) }}
+            </p>
+            <p class="text-sm text-light-content dark:text-dark-content">
+              {{ this.getAddressLine3(this.orderContext.shippedToAddressId) }}
+            </p>
+            <p
+              class="text-sm text-light-primary dark:text-dark-warning underline cursor-pointer"
+            >
+              &nbsp;
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex p-2 justify-between border-b-2">
+        @if(this.orderContext.deliveryWindow!.length > 0) {
+        <div>
+          <div class="text-light-content text-sm underline underline-offset-2">
+            Delivery Windows:
+          </div>
+          <ul class="list-disc text-sm">
+            @for(window of this.orderContext.deliveryWindow; track $index ) {
+            <li class="ml-2">
+              {{ window[0] | date : "EE MMM dd" }} -
+              {{ window[1] | date : "EE MMM dd" }}
+            </li>
+            }
+          </ul>
+        </div>
+        } @if(this.orderContext.pickupWindow!.length > 0) {
+        <div>
+          <div
+            class="text-light-content text-sm underline underline-offset-2 text-right self-end"
+          >
+            Pickup Windows:
+          </div>
+          <div dir="rtl" class="pr-4">
+            <ul class="list-disc text-sm text-right">
+              @for(window of this.orderContext.pickupWindow; track $index ) {
+              <li class="ml-2">
+                {{ window[0] | date : "EE MMM dd" }} -
+                {{ window[1] | date : "EE MMM dd" }}
+              </li>
+              }
+            </ul>
+          </div>
+        </div>
+        }
+      </div>
+
+      @if(this.orderContext.deliveryPickupNotes != "") {
+      <div class="flex flex-col justify-center mt-5 px-8">
+        <label
+          for="deliveryPickupNotes"
+          class="text-sm font-medium text-light-heading dark:text-dark-heading text-center"
+          >Delivery/ Pickup Notes:
+        </label>
+        <textarea
+          type="textarea"
+          id="deliveryPickupNotes"
+          class="form-input rounded-md appearance-auto resize-y"
+          [disabled]="true"
+          [value]="this.orderContext.deliveryPickupNotes"
+        >
+        </textarea>
+      </div>
+      }
+
+      <div class="flex flex-col justify-center mt-5">
+        <h2
+          class="text-lg text-light-heading dark:text-dark-heading text-center"
+        >
+          Items:
+        </h2>
+
+        <table class="min-w-full leading-normal px-9">
+          <thead>
+            <tr
+              class="bg-light-section dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
+            >
+              <th
+                class="pr-3 pl-16 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Item (Category - Name)
+              </th>
+
+              <th
+                class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-right"
+              >
+                Qty
+              </th>
+              <th
+                class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+              >
+                Price
+              </th>
+
+              <th
+                class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-right"
+              >
+                Total
+              </th>
+            </tr>
+          </thead>
+          @if(this.orderItems.length > 0) { @for(item of this.orderItems; track
+          item.id) {
+
+          <tr
+            class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
+          >
+            <td class="pr-3 pl-16 py-2 text-sm text-left">
+              {{ getItemCategoryName(item.itemId) }} -
+              {{ getItemName(item.itemId) }}
+            </td>
+
+            <td class="px-3 py-2 text-sm text-right">
+              {{ item.qty }}
+            </td>
+            <td class="px-3 py-2 text-sm text-left">
+              {{ getItemPrice(item.itemId) | currency }}
+            </td>
+
+            <td class="px-3 py-2 text-sm text-right">
+              {{ item.qty * getItemPrice(item.itemId!)! | currency }}
+            </td>
+          </tr>
+
+          } } @else {
+
+          <h2
+            class="w-full text-2xl my-5 text-center text-light-heading dark:text-dark-heading"
+          >
+            No Items
+          </h2>
+
+          }
+        </table>
+        <div class="mt-2 justify-end flex">
+          <p class="text-light-heading text-right mr-2 font-semibold">
+            Subtotal:
+          </p>
+          <p class="text-light-heading text-right font-semibold">
+            {{ this.orderSubTotal | currency }}
+          </p>
+        </div>
+        <div class="mt-2 flex justify-between">
+          <div class="w-1/3">
+            <label for="paymentTerms" class="text-xs text-left"
+              >Payment Terms</label
+            >
+            <select
+              id="paymentTerms"
+              class="form-input rounded-sm appearance-auto px-3 py-1"
+              [disabled]="true"
+            >
+              @for (item of paymentTerms; track $index) { @if(item.value ==
+              this.orderContext.paymentTerms) {
+              <option [value]="item.value">
+                {{ item.label }}
+              </option>
+              } }
+            </select>
+          </div>
+          <div class="flex flex-col justify-end w-1/4">
+            <label for="taxRate" class="text-xs text-right">Tax Rate</label>
+            <input
+              id="taxRate"
+              class="form-input rounded-sm appearance-auto px-3 py-1"
+              [disabled]="true"
+              [value]="this.orderContext.taxRate"
+            />
+          </div>
+        </div>
+        <div class="my-2 justify-end">
+          <p class="text-md text-right">
+            Shipping: {{ this.shippingRate[3] | currency }}
+          </p>
+
+          <h3 class="text-lg text-right font-bold">
+            Total:
+            {{ this.orderContext.amount | currency }}
+          </h3>
+        </div>
+      </div>
     </div>
-    <p class="mb-6 text-light-content">
-      VIEWING ORDER ID: {{ this.orderContext.id }}
-    </p>
-    @for(event of eventTypes; track event.id) {
-    <p>{{ event.name }} - {{ event.id }}</p>
     }
-    <div class="h-7 bg-light-input py-3 my-4">Text</div>
-
-    @for(address of customerAddresses; track address.id) {
-
-    <p>{{ address.id }}</p>
-    <p>{{ address.street1 }}</p>
-    <p>{{ address.dependentLocality }}, {{ address.locale }}</p>
-    <p>{{ address.country }} - {{ address.postalCode }}</p>
-    <div class="mb-3 h-3 p-2">Text</div>
-    } }
   </div>
 </div>
