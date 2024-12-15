@@ -40,6 +40,7 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
 import { SelectCustomerComponent } from './components/order/select-customer/select-customer.component';
+import { OrderStatusDisplayComponent } from './components/order/order-status-display/order-status-display.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { SelectCustomerComponent } from './components/order/select-customer/sele
     AddOrderComponent,
     OrderDetailComponent,
     SelectCustomerComponent,
+    OrderStatusDisplayComponent,
   ],
   imports: [
     BrowserModule,

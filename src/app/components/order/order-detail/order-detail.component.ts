@@ -34,35 +34,38 @@ export class OrderDetailComponent implements OnInit {
   paymentTerms: any;
   orderSubTotal: number = 0;
 
-  ngOnInit(): void {
-    this.orderService.orderContext$.subscribe((val) => {
+  async ngOnInit(): Promise<void> {
+    await this.orderService.orderContext$.subscribe((val) => {
       this.orderContext = val;
-      this.getOrderItems();
+      if (val != null) this.getOrderItems();
     });
-    this.customerService.customerContext$.subscribe((value) => {
+    await this.customerService.customerContext$.subscribe((value) => {
       this.customerContext = value;
-      this.getCustomerAddresses();
+      if (value != null) this.getCustomerAddresses();
     });
-    this.eventTypes = this.orderService.getEventsContext();
-    if (this.eventTypes?.length == 0) {
-      this.orderService.getEventTypes().subscribe((res) => {
-        this.eventTypes = res;
-        this.orderService.setEventsContext(res);
-      });
-    }
-    this.inventoryService
-      .getInventoryItems()
-      .subscribe((res) => (this.inventoryItems = res));
-    this.inventoryService
-      .getInventoryCategories()
-      .subscribe((res) => (this.inventoryCategories = res));
 
-    this.paymentTerms = Object.keys(PaymentTerms)
-      .filter((key) => isNaN(Number(key))) // Filter out reverse mappings
-      .map((key) => ({
-        value: PaymentTerms[key as keyof typeof PaymentTerms],
-        label: key,
-      }));
+    if (this.orderContext != null) {
+      this.eventTypes = await this.orderService.getEventsContext();
+      if (this.eventTypes?.length == 0) {
+        this.orderService.getEventTypes().subscribe((res) => {
+          this.eventTypes = res;
+          this.orderService.setEventsContext(res);
+        });
+      }
+      await this.inventoryService
+        .getInventoryItems()
+        .subscribe((res) => (this.inventoryItems = res));
+      await this.inventoryService
+        .getInventoryCategories()
+        .subscribe((res) => (this.inventoryCategories = res));
+
+      this.paymentTerms = Object.keys(PaymentTerms)
+        .filter((key) => isNaN(Number(key)))
+        .map((key) => ({
+          value: PaymentTerms[key as keyof typeof PaymentTerms],
+          label: key,
+        }));
+    }
   }
 
   getCustomerAddresses() {
@@ -78,7 +81,6 @@ export class OrderDetailComponent implements OnInit {
       this.orderService
         .getOrderItems(this.orderContext!.id)
         .subscribe((res) => {
-          console.log(res);
           this.orderItems = res;
           this.getOrderTotal();
         });
@@ -86,7 +88,6 @@ export class OrderDetailComponent implements OnInit {
   }
 
   getOrderTotal() {
-    console.log('inside getTotal()');
     this.orderItems.forEach((i) => {
       this.orderSubTotal +=
         this.inventoryItems.find((j) => j.id == i.itemId)!.price * i.qty;

@@ -86,16 +86,10 @@
               <td class="px-5 py-5 text-sm">
                 {{ getEventName(order.eventTypeId) }}
               </td>
-              <td
-                class="px-5 py-5 text-sm"
-                [ngClass]="{ 'text-light-success': order.currentStatus == 3 }"
-              >
-                {{ getOrderStatus(order.currentStatus) }}
+              <td class="px-5 py-5 text-sm">
+                <order-status-display [status]="order.currentStatus" />
               </td>
-              <td
-                class="px-5 py-5 text-sm"
-                [ngClass]="{ 'text-light-success': order.currentStatus == 3 }"
-              >
+              <td class="px-5 py-5 text-sm">
                 {{ order.balanceDue | currency }}
               </td>
               <td class="px-5 py-5 text-sm">

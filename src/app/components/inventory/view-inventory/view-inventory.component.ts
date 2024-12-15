@@ -23,7 +23,9 @@ export class ViewInventoryComponent implements OnInit {
   ngOnInit() {
     this.inventoryService
       .getInventoryCategories()
-      .subscribe((res: InventoryCategory[]) => (this.categories = res));
+      .subscribe((res: InventoryCategory[]) => {
+        this.categories = res;
+      });
 
     this.inventoryService
       .getInventoryItems()

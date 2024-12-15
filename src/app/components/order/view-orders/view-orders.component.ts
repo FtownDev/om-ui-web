@@ -6,6 +6,7 @@ import { Component, inject, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderStatus } from '@/src/app/models/Order/OrderStatus';
 import { EventType } from '@/src/app/models/Order/EventType';
+import { OrderStatusDisplayComponent } from '../order-status-display/order-status-display.component';
 
 @Component({
   selector: 'app-view-orders',
