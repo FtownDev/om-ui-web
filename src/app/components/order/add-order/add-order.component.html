@@ -1,5 +1,5 @@
 <div class="justify-center min-h-screen">
-  <div class="container min-h-full max-w-[525px] lg:max-w-6xl p-4 md:p-2">
+  <div class="container max-w-[525px] lg:max-w-6xl p-4 md:p-2">
     @if(this.isLoading) {
     <div
       id="loading-overlay"
@@ -180,7 +180,7 @@
             </div>
           </div>
         </div>
-        <div class="flex gap-5">
+        <div class="grid gap-5 md:grid-cols-2 mt-5">
           @if(specifyDeliverTimes) {
           <div class="flex p-2 justify-between w-full border-b-2">
             @if(this.tempDeliveryTimes.length != 0) {
@@ -264,7 +264,7 @@
                 <div class="flex justify-end gap-4 mt-5 w-full pr-5">
                   <button
                     class="p-2 rounded-lg bg-none border-2 text-light-content hover:bg-light-border"
-                    (click)="showDeliveryModal = false"
+                    (click)="showDeliveryModal = false; resetDeliverWindows()"
                   >
                     Close
                   </button>
@@ -279,12 +279,14 @@
             </div>
           </div>
           } } @else {
-          <button
-            class="p-1 px-2 rounded-lg bg-dark-input mt-5 text-light-accent"
-            (click)="specifyDeliverTimes = true; showDeliveryModal = true"
-          >
-            Specify Delivery Times
-          </button>
+          <div class="flex justify-center">
+            <button
+              class="p-1 px-2 text-sm rounded-lg bg-dark-input text-light-accent h-7"
+              (click)="specifyDeliverTimes = true; showDeliveryModal = true"
+            >
+              Specify Delivery Times
+            </button>
+          </div>
           } @if(specifyPickupTimes) {
           <div class="flex p-2 justify-between w-full border-b-2">
             @if(this.tempPickupTimes.length != 0) {
@@ -368,7 +370,7 @@
                 <div class="flex justify-end gap-4 mt-5 w-full pr-5">
                   <button
                     class="p-2 rounded-lg bg-none border-2 text-light-content hover:bg-light-border"
-                    (click)="showPickupModal = false"
+                    (click)="showPickupModal = false; resetPickupWindows()"
                   >
                     Close
                   </button>
@@ -383,19 +385,21 @@
             </div>
           </div>
           } } @else {
-          <button
-            class="p-1 px-2 rounded-lg bg-dark-input mt-5 text-light-accent"
-            (click)="specifyPickupTimes = true; showPickupModal = true"
-          >
-            Specify Pickup Times
-          </button>
+          <div class="flex justify-center">
+            <button
+              class="p-1 px-2 text-sm rounded-lg bg-dark-input text-light-accent h-7"
+              (click)="specifyPickupTimes = true; showPickupModal = true"
+            >
+              Specify Pickup Times
+            </button>
+          </div>
           }
         </div>
 
         <div class="flex flex-col justify-center mt-5">
           <label
             for="deliveryPickupNotes"
-            class="text-sm font-medium text-light-heading dark:text-dark-heading text-center"
+            class="text-sm font-medium text-light-heading dark:text-dark-heading pl-4"
             >Delivery/ Pickup Notes:
           </label>
           <textarea
@@ -408,16 +412,81 @@
         </div>
 
         <div class="flex flex-col justify-center mt-5">
-          <h2
+          @if(this.orderItemForm != null) {
+          <div class="mt-4 mb-1">
+            <h2 class="text-lg text-light-content">Items:</h2>
+          </div>
+          <form
+            [formGroup]="orderItemForm"
+            class="flex justify-between w-full gap-2 bg-light-section dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
+          >
+            <div class="flex w-2/3 gap-2">
+              <select
+                id="selectItemCategory"
+                class="form-input rounded-sm appearance-auto px-3"
+                (change)="onItemCategoryChange($event.target)"
+                formControlName="categoryId"
+              >
+                <option value="">Category</option>
+                @for (category of itemCategories; track category.id) {
+                <option [value]="category.id">{{ category.name }}</option>
+                }
+              </select>
+
+              <select
+                id="selectItem"
+                class="form-input rounded-sm appearance-auto px-3"
+                (change)="onSelectItemChange($event.target)"
+                formControlName="itemId"
+              >
+                <option value="">Item</option>
+                @for (item of filteredItems; track item.id) {
+                <option [value]="item.id">{{ item.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="flex gap-2 justify-end w-1/3 align-middle">
+              <input
+                id="qty"
+                type="number"
+                formControlName="qty"
+                step="1"
+                class="form-input rounded-md appearance-auto px-5 text-"
+                min="1"
+                max="10000"
+              />
+
+              <!-- Error messages -->
+              <div *ngIf="i['qty'].invalid && i['qty']; touched">
+                <small *ngIf="i['qty'].errors?.['required']" class="error">
+                  required
+                </small>
+              </div>
+
+              <button
+                class="flex p-2 pb-1 rounded-md bg-dark-input text-light-accent text-center text-md"
+                (click)="addOrderItem()"
+              >
+                <p class="mt-0.5">Add</p>
+                <ng-icon
+                  class="ml-2 text-md text-center flex align-middle mt-1"
+                  name="bootstrapPlusCircle"
+                />
+              </button>
+            </div>
+          </form>
+          }
+
+          <!-- <h2
             class="text-lg text-light-heading dark:text-dark-heading text-center"
           >
             Items:
-          </h2>
+          </h2> -->
 
-          <table class="min-w-full leading-normal px-9">
+          <table class="min-w-full leading-normal px-9 mt-2">
             <thead>
               <tr
-                class="bg-light-section dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
+                class="bg-light-section rounded-md dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
               >
                 <th
                   class="pr-3 pl-16 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
@@ -524,82 +593,19 @@
             </p>
 
             @if(this.orderSubTotal > 0 && this.orderForm.get('taxRate')?.value
-            != null) {
+            != 0.0) {
             <h3 class="text-lg text-right font-bold">
               Order Total:
               {{
                 this.orderSubTotal +
-                  (this.orderSubTotal + this.shippingRates[3]) *
-                    this.orderForm.get("taxRate")?.value | currency
+                  (this.orderSubTotal +
+                    this.shippingRates[3] *
+                      this.orderForm.get("taxRate")?.value) | currency
               }}
             </h3>
 
             }
           </div>
-          @if(this.orderItemForm != null) {
-          <div class="mt-12 mb-2">
-            <h2 class="text-lg text-light-content">Add New Item:</h2>
-          </div>
-          <form
-            [formGroup]="orderItemForm"
-            class="flex justify-between w-full gap-2 bg-light-section dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
-          >
-            <div class="flex w-2/3 gap-2">
-              <select
-                id="selectItemCategory"
-                class="form-input rounded-sm appearance-auto px-3"
-                (change)="onItemCategoryChange($event.target)"
-                formControlName="categoryId"
-              >
-                <option value="">Category</option>
-                @for (category of itemCategories; track category.id) {
-                <option [value]="category.id">{{ category.name }}</option>
-                }
-              </select>
-
-              <select
-                id="selectItem"
-                class="form-input rounded-sm appearance-auto px-3"
-                (change)="onSelectItemChange($event.target)"
-                formControlName="itemId"
-              >
-                <option value="">Item</option>
-                @for (item of filteredItems; track item.id) {
-                <option [value]="item.id">{{ item.name }}</option>
-                }
-              </select>
-            </div>
-            <div class="flex gap-2 justify-end w-1/3 align-middle">
-              <input
-                id="qty"
-                type="number"
-                formControlName="qty"
-                step="1"
-                class="form-input rounded-md appearance-auto px-5 text-"
-                min="1"
-                max="10000"
-              />
-
-              <!-- Error messages -->
-              <div *ngIf="i['qty'].invalid && i['qty']; touched">
-                <small *ngIf="i['qty'].errors?.['required']" class="error">
-                  required
-                </small>
-              </div>
-
-              <button
-                class="flex p-2 pb-1 rounded-md bg-dark-input text-light-accent text-center text-md"
-                (click)="addOrderItem()"
-              >
-                <p class="mt-0.5">Add</p>
-                <ng-icon
-                  class="ml-2 text-md text-center flex align-middle mt-1"
-                  name="bootstrapPlusCircle"
-                />
-              </button>
-            </div>
-          </form>
-          }
         </div>
       </div>
     </form>

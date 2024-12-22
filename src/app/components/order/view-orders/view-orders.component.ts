@@ -36,7 +36,6 @@ export class ViewOrdersComponent implements OnInit {
         this.totalCount += res.pageSize;
         this.getCustomers();
         this.getEventTypes();
-        this.isLoading = false;
       });
   }
 
@@ -47,6 +46,7 @@ export class ViewOrdersComponent implements OnInit {
           .getCustomer(o.billedToCustomerId)
           .subscribe((res) => this.customers.push(res));
       });
+      this.isLoading = false;
     } else {
       console.log('orders is empty');
     }
@@ -60,11 +60,13 @@ export class ViewOrdersComponent implements OnInit {
   }
 
   getEventName(id: string) {
-    const event = this.eventTypes.find((e) => e.id == id);
-    if (!event) {
-      console.log('Unable to find EventId: ' + id);
-    } else {
-      return event.name;
+    if (this.eventTypes.length > 0) {
+      const event = this.eventTypes.find((e) => e.id == id);
+      if (!event) {
+        console.log('Unable to find EventId: ' + id);
+      } else {
+        return event.name;
+      }
     }
     return null;
   }

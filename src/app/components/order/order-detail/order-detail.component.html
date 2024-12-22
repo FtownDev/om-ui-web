@@ -122,7 +122,8 @@
             }
           </ul>
         </div>
-        } @if(this.orderContext.pickupWindow!.length > 0) {
+        } @if(this.orderContext.pickupWindow &&
+        this.orderContext.pickupWindow.length > 0) {
         <div>
           <div
             class="text-light-content text-sm underline underline-offset-2 text-right self-end"
@@ -159,8 +160,7 @@
         >
         </textarea>
       </div>
-      }
-
+      } @if(this.orderItems.length > 0) {
       <div class="flex flex-col justify-center mt-5">
         <h2
           class="text-lg text-light-heading dark:text-dark-heading text-center"
@@ -277,6 +277,7 @@
           </h3>
         </div>
       </div>
+      }
     </div>
     }
   </div>
