@@ -70,6 +70,11 @@ export class OrderDetailComponent implements OnInit {
     }
   }
 
+  async navigateToUpdateOrder() {
+    await this.orderService.setOrderItemsContext(this.orderItems);
+    this.router.navigate(['/orders', this.orderContext?.id, 'update']);
+  }
+
   getCustomerAddresses() {
     this.customerService
       .getAddresses(this.customerContext!.id)

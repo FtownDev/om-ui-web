@@ -35,7 +35,7 @@ export class AddOrderComponent implements OnInit {
   orderContext: Order | null = null;
   orderService = inject(OrderService);
   customerService = inject(CustomerService);
-  iventroryService = inject(InventoryService);
+  inventoryService = inject(InventoryService);
   customerContext: Customer | null = null;
   eventTypes: EventType[] = [];
   addressContext: Address[] | null = [];
@@ -45,8 +45,6 @@ export class AddOrderComponent implements OnInit {
   paymentTerms: any;
   taxRates = TaxRates;
   shippingRates = ShippingRates;
-
-  selectedShippingRate: any;
 
   // Technical debt item, accidently made OrderItem need an OrderId on the create request, but order Id doesnt exist until after creation
   // Will not affect anything because on the backend this value gets overwritten with the actual ID
@@ -117,11 +115,11 @@ export class AddOrderComponent implements OnInit {
       this.orderService.setEventsContext(res);
     });
 
-    this.iventroryService.getInventoryCategories().subscribe((res) => {
+    this.inventoryService.getInventoryCategories().subscribe((res) => {
       this.itemCategories = res;
     });
 
-    this.iventroryService.getInventoryItems().subscribe((res) => {
+    this.inventoryService.getInventoryItems().subscribe((res) => {
       this.items = res;
     });
 

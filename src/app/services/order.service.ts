@@ -24,11 +24,22 @@ export class OrderService {
   private eventTypesContext = new BehaviorSubject<EventType[] | null>(null);
   eventTypesContext$ = this.eventTypesContext.asObservable();
 
+  private orderItemsContext = new BehaviorSubject<OrderItem[] | null>(null);
+  orderItemsContext$ = this.orderItemsContext.asObservable();
+
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
   constructor(private httpClient: HttpClient) {}
+
+  setOrderItemsContext(value: OrderItem[]) {
+    this.orderItemsContext.next(value);
+  }
+
+  getOrderItemContext(): OrderItem[] | null {
+    return this.orderItemsContext.getValue();
+  }
 
   setOrderContext(value: Order) {
     this.orderContext.next(value);
