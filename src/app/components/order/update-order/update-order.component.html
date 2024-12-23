@@ -23,7 +23,7 @@
           <h2
             class="text-2xl font-bold mb-6 text-center text-light-heading dark:text-dark-heading"
           >
-            Edit Order
+            Order #{{ this.orderContext.id!.substring(0, 7) }}
           </h2>
 
           <div class="flex flex-col gap-2">
@@ -40,6 +40,9 @@
                 id="datepicker"
                 class="form-input rounded-sm appearance-auto pr-2"
                 (change)="onEventDateChange($event.target)"
+                [value]="
+                  orderForm.get('eventDate')!.value | date : 'yyyy-MM-dd'
+                "
               />
               <div
                 class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
@@ -64,15 +67,12 @@
                 >Event Type</label
               >
               <select
-                id="country"
+                id="eventType"
                 class="form-input rounded-sm appearance-auto pr-2"
-                (change)="onEventTypeChange($event.target)"
-                (placeholder)="
-                  getEventName(this.orderForm!.get('eventTypeId')!.value)
-                "
+                [formControlName]="'eventTypeId'"
               >
                 @for (event of eventTypesContext; track event.id) {
-                <option [value]="event.id">{{ event.name }}</option>
+                <option [ngValue]="event.id">{{ event.name }}</option>
                 }
               </select>
             </div>
