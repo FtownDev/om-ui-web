@@ -11,6 +11,7 @@ import { OrderService } from '@/src/app/services/order.service';
 import { Component, inject, OnInit } from '@angular/core';
 import { PaymentTerms } from '@/src/app/models/Order/PaymentTerms';
 import { ShippingRates } from '@/src/app/models/Order/ShippingRates';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-detail',
@@ -24,6 +25,7 @@ export class OrderDetailComponent implements OnInit {
   orderService = inject(OrderService);
   customerService = inject(CustomerService);
   inventoryService = inject(InventoryService);
+  router = inject(Router);
   customerContext: Customer | null = null;
   eventTypes: EventType[] | null = [];
   customerAddresses: Address[] = [];

@@ -9,6 +9,7 @@ import { AddInventoryComponent } from './components/inventory/add-inventory/add-
 import { ViewOrdersComponent } from './components/order/view-orders/view-orders.component';
 import { OrderDetailComponent } from './components/order/order-detail/order-detail.component';
 import { AddOrderComponent } from './components/order/add-order/add-order.component';
+import { UpdateOrderComponent } from './components/order/update-order/update-order.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -45,6 +46,10 @@ const routes: Routes = [
   {
     path: 'orders/add',
     component: AddOrderComponent,
+  },
+  {
+    path: 'orders/:orderId/update',
+    component: UpdateOrderComponent,
   },
 ];
 

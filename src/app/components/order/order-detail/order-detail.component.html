@@ -6,6 +6,13 @@
     } @else if(this.customerContext == null) {
     <p>CUSTOMER CONTEXT IIS NULL</p>
     } @else {
+    <button
+      (click)="this.router.navigate(['/orders', orderContext.id, 'update'])"
+      class="bg-dark-accent dark:bg-dark-primary text-light-section dark:text-dark-section py-2 px-4 rounded-full flex"
+    >
+      Edit Order
+      <ng-icon class="text-2xl ml-2" name="bootstrapPencilSquare" />
+    </button>
 
     <div
       class="max-w-2xl mx-auto bg-light-fill dark:bg-dark-section p-8 rounded-sm shadow-lg"

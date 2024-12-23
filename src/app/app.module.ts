@@ -37,10 +37,12 @@ import {
   bootstrapPlusCircle,
   bootstrapTable,
   bootstrapPersonSquare,
+  bootstrapPencilSquare,
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
 import { SelectCustomerComponent } from './components/order/select-customer/select-customer.component';
 import { OrderStatusDisplayComponent } from './components/order/order-status-display/order-status-display.component';
+import { UpdateOrderComponent } from './components/order/update-order/update-order.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,7 @@ import { OrderStatusDisplayComponent } from './components/order/order-status-dis
     OrderDetailComponent,
     SelectCustomerComponent,
     OrderStatusDisplayComponent,
+    UpdateOrderComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,6 +80,7 @@ import { OrderStatusDisplayComponent } from './components/order/order-status-dis
       bootstrapPlusCircle,
       bootstrapTable,
       bootstrapPersonSquare,
+      bootstrapPencilSquare,
     }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
