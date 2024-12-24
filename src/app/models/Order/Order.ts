@@ -4,7 +4,7 @@ import { PaymentTerms } from './PaymentTerms';
 export interface Order {
   id?: string;
   created: Date;
-  updated?: Date;
+  updated?: string;
   eventDate: Date;
   eventTypeId: string;
   billedToCustomerId: string;

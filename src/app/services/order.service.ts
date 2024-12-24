@@ -60,7 +60,6 @@ export class OrderService {
   createOrder(data: OrderCreateRequest) {
     let requestUrl = `${this.API_URL}/orders`;
     let requestBody = JSON.stringify(data);
-    console.log(requestBody);
     return this.httpClient
       .post<Order>(requestUrl, requestBody, this.httpOptions)
       .pipe(
@@ -102,6 +101,17 @@ export class OrderService {
   getOrderItems(orderId: string | undefined): Observable<OrderItem[]> {
     return this.httpClient
       .get<OrderItem[]>(`${this.API_URL}/orders/${orderId}/items`)
+      .pipe(
+        map((response) => response),
+        catchError(this.handleError)
+      );
+  }
+
+  updateOrder(updatedOrder: Order, userId: string): Observable<Order> {
+    let requestUrl = `${this.API_URL}/orders?userId=${userId}`;
+    let requestBody = JSON.stringify(updatedOrder);
+    return this.httpClient
+      .put<Order>(requestUrl, requestBody, this.httpOptions)
       .pipe(
         map((response) => response),
         catchError(this.handleError)

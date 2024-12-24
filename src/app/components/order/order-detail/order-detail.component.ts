@@ -79,7 +79,6 @@ export class OrderDetailComponent implements OnInit {
     this.customerService
       .getAddresses(this.customerContext!.id)
       .subscribe((res) => {
-        console.log(res);
         this.customerAddresses = res;
       });
   }

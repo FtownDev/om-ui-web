@@ -81,7 +81,7 @@
                 {{ getCustomerName(order.billedToCustomerId) }}
               </td>
               <td class="px-5 py-5 text-sm">
-                {{ order.eventDate | date : "shortDate" }}
+                {{ order.eventDate | date : "shortDate" : "UTC" }}
               </td>
               <td class="px-5 py-5 text-sm">
                 {{ getEventName(order.eventTypeId) }}

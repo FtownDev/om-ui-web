@@ -41,7 +41,8 @@
                 class="form-input rounded-sm appearance-auto pr-2"
                 (change)="onEventDateChange($event.target)"
                 [value]="
-                  orderForm.get('eventDate')!.value | date : 'yyyy-MM-dd'
+                  orderForm.get('eventDate')?.value
+                    | date : 'yyyy-MM-dd' : 'UTC'
                 "
               />
               <div
@@ -185,8 +186,8 @@
               <ul class="list-disc text-sm">
                 @for(window of this.tempDeliveryTimes; track $index ) {
                 <li class="ml-2">
-                  {{ window[0] | date : "EE MMM dd" }} -
-                  {{ window[1] | date : "EE MMM dd" }}
+                  {{ window[0] | date : "EE MMM dd" : "UTC" }} -
+                  {{ window[1] | date : "EE MMM dd" : "UTC" }}
                 </li>
                 }
               </ul>
@@ -291,8 +292,8 @@
               <ul class="list-disc text-sm">
                 @for(window of this.tempPickupTimes; track $index ) {
                 <li class="ml-2">
-                  {{ window[0] | date : "EE MMM dd" }} -
-                  {{ window[1] | date : "EE MMM dd" }}
+                  {{ window[0] | date : "EE MMM dd" : "UTC" }} -
+                  {{ window[1] | date : "EE MMM dd" : "UTC" }}
                 </li>
                 }
               </ul>

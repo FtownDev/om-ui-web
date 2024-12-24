@@ -95,7 +95,7 @@
               (click)="selectCustomer(customer)"
             >
               <td class="px-5 py-5 text-sm">
-                {{ customer.created | date : "shortDate" }}
+                {{ customer.created | date : "shortDate" : "UTC" }}
               </td>
               <td class="px-5 py-5 text-sm">
                 {{ customer.firstName }} {{ customer.lastName }}

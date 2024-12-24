@@ -53,6 +53,10 @@ export class UpdateOrderComponent implements OnInit {
   orderItemForm: FormGroup | undefined;
   initialValues: Order | undefined;
 
+  // Shipping
+  initialDeliveryWindows: string[][] = [];
+  initialPickupWindows: string[][] = [];
+
   // Inventory
   itemCategories: InventoryCategory[] = [];
   items: InventoryItem[] = [];
@@ -139,6 +143,7 @@ export class UpdateOrderComponent implements OnInit {
       taxRate: [this.orderContext?.taxRate, Validators.required],
       deliveryPickupNotes: [this.orderContext?.deliveryPickupNotes],
       discount: [this.orderContext?.discount],
+      currentStatus: [this.orderContext?.currentStatus, Validators.required],
       paymentTerms: [this.orderContext?.paymentTerms, Validators.required],
     });
 
@@ -177,6 +182,7 @@ export class UpdateOrderComponent implements OnInit {
         deliveryPickupNotes: this.orderContext.deliveryPickupNotes,
         discount: this.orderContext.discount,
         paymentTerms: this.orderContext.paymentTerms,
+        currentStatus: this.orderContext.currentStatus,
       });
 
       this.initialValues = { ...this.orderContext };
@@ -189,8 +195,10 @@ export class UpdateOrderComponent implements OnInit {
 
       if ((this.orderContext.deliveryWindow?.length ?? 0) > 0)
         this.tempDeliveryTimes = this.orderContext.deliveryWindow ?? [];
+      this.initialDeliveryWindows = this.tempDeliveryTimes;
       if ((this.orderContext.pickupWindow?.length ?? 0) > 0)
         this.tempPickupTimes = this.orderContext.pickupWindow ?? [];
+      this.initialPickupWindows = this.tempPickupTimes;
     }
   }
 
@@ -273,7 +281,7 @@ export class UpdateOrderComponent implements OnInit {
     let withShipping = subTotal + this.shippingRates[3];
     let orderTotal =
       withShipping + withShipping * this.orderForm?.get('taxRate')?.value;
-    return orderTotal;
+    return Number(orderTotal.toFixed(2));
   }
   calcualteSubTotal(): number {
     let total = 0;
@@ -285,7 +293,7 @@ export class UpdateOrderComponent implements OnInit {
         total += founditem?.price! * orderItem.qty;
       });
     }
-    return total;
+    return Number(total.toFixed(2));
   }
 
   getItemPrice(itemId: string) {
@@ -377,9 +385,9 @@ export class UpdateOrderComponent implements OnInit {
   }
 
   onEventDateChange(event: any) {
-    this.orderForm!.get('eventDate')!.setValue(
-      new Date(event.value).toISOString()
-    );
+    this.orderForm
+      ?.get('eventDate')
+      ?.setValue(new Date(event.value).toISOString());
   }
 
   onEventTypeChange(event: any) {
@@ -409,7 +417,66 @@ export class UpdateOrderComponent implements OnInit {
     );
   }
 
+  areWindowsChanged(): boolean {
+    return (
+      !this.arraysEqual(this.tempDeliveryTimes, this.initialDeliveryWindows) ||
+      !this.arraysEqual(this.tempPickupTimes, this.initialPickupWindows)
+    );
+  }
+
+  arraysEqual(arr1: string[][], arr2: string[][]): boolean {
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i].length !== arr2[i].length) {
+        return false;
+      }
+      for (let j = 0; j < arr1[i].length; j++) {
+        if (arr1[i][j] !== arr2[i][j]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   onSubmit() {
-    console.log('is order form dirty: ', this.isFormDirty());
+    const formVal = this.orderForm?.value;
+    const updatedOrder: Order = {
+      id: this.orderContext!.id,
+      eventDate: formVal.eventDate,
+      eventTypeId: formVal.eventTypeId,
+      billedToCustomerId: formVal.billedToCustomerId,
+      billedToAddressId: formVal.billedToAddressId,
+      shippedToAddressId: formVal.shippedToAddressId,
+      amount: Number(this.calculateOrderTotal().toFixed(2)),
+      balanceDue: formVal.balanceDue,
+      taxRate: formVal.taxRate,
+      deliveryPickupNotes: formVal.deliveryPickupNotes,
+      paymentTerms: formVal.paymentTerms,
+      deliveryWindow: this.tempDeliveryTimes,
+      pickupWindow: this.tempPickupTimes,
+      currentStatus: formVal.currentStatus,
+      created: this.orderContext!.created!,
+      deposit: this.orderContext!.deposit!,
+      updated: new Date().toISOString(),
+      discount: this.orderContext?.discount,
+    };
+
+    if (
+      this.areWindowsChanged() ||
+      (this.orderForm?.valid && this.isFormDirty())
+    ) {
+      console.log('updated order: ', JSON.stringify(updatedOrder));
+
+      this.orderService
+        .updateOrder(updatedOrder, crypto.randomUUID())
+        .subscribe((res) => {
+          console.log(res);
+          this.orderService.setOrderContext(res);
+        });
+    }
   }
 }

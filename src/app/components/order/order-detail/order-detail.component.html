@@ -123,8 +123,8 @@
           <ul class="list-disc text-sm">
             @for(window of this.orderContext.deliveryWindow; track $index ) {
             <li class="ml-2">
-              {{ window[0] | date : "EE MMM dd" }} -
-              {{ window[1] | date : "EE MMM dd" }}
+              {{ window[0] | date : "EE MMM dd" : "UTC" }} -
+              {{ window[1] | date : "EE MMM dd" : "UTC" }}
             </li>
             }
           </ul>
@@ -141,8 +141,8 @@
             <ul class="list-disc text-sm text-right">
               @for(window of this.orderContext.pickupWindow; track $index ) {
               <li class="ml-2">
-                {{ window[0] | date : "EE MMM dd" }} -
-                {{ window[1] | date : "EE MMM dd" }}
+                {{ window[0] | date : "EE MMM dd" : "UTC" }} -
+                {{ window[1] | date : "EE MMM dd" : "UTC" }}
               </li>
               }
             </ul>
