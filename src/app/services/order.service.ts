@@ -69,6 +69,13 @@ export class OrderService {
       );
   }
 
+  getOrderById(id: string): Observable<Order> {
+    return this.httpClient.get<Order>(`${this.API_URL}/orders/${id}`).pipe(
+      map((response) => response),
+      catchError(this.handleError)
+    );
+  }
+
   getOrders(
     pageSize = 50,
     currentNumber = 0

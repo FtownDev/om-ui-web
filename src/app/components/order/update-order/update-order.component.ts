@@ -22,9 +22,13 @@ import { ShippingRates } from '@/src/app/models/Order/ShippingRates';
   styleUrl: './update-order.component.css',
 })
 export class UpdateOrderComponent implements OnInit {
-  // flags
+  // Flags
   error = false;
   isLoading = false;
+  showPickupModal: Boolean = false;
+  specifyPickupTimes: Boolean = false;
+  specifyDeliverTimes: Boolean = false;
+  showDeliveryModal: Boolean = false;
 
   // Services
   customerService = inject(CustomerService);
@@ -39,10 +43,7 @@ export class UpdateOrderComponent implements OnInit {
   addressContext: Address[] | null = null;
   eventTypesContext: EventType[] | null = null;
   customerContext: Customer | null = null;
-  customerAddresses: Address[] = [];
   orderItems: OrderItem[] = [];
-  inventoryItems: InventoryItem[] = [];
-  inventoryCategories: InventoryCategory[] = [];
 
   // Forms
   orderForm: FormGroup<any> | undefined;
@@ -50,24 +51,24 @@ export class UpdateOrderComponent implements OnInit {
   deliveryWindowForm: FormGroup | undefined;
   pickupWindowForm: FormGroup | undefined;
   orderItemForm: FormGroup | undefined;
+  initialValues: Order | undefined;
 
   // Inventory
   itemCategories: InventoryCategory[] = [];
   items: InventoryItem[] = [];
   filteredItems: InventoryItem[] = [];
+  inventoryCategories: InventoryCategory[] = [];
+
+  // Enums
+  paymentTerms: any;
+  shippingRates = ShippingRates;
 
   // Locals
   orderSubTotal: number | null = null;
   orderId: string | null | undefined;
   selectedShippingAddress: Address | undefined;
-  specifyDeliverTimes: Boolean = false;
-  showDeliveryModal: Boolean = false;
   tempDeliveryTimes: string[][] = [];
   tempPickupTimes: string[][] = [];
-  showPickupModal: Boolean = false;
-  specifyPickupTimes: Boolean = false;
-  paymentTerms: any;
-  shippingRates = ShippingRates;
 
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
@@ -76,20 +77,40 @@ export class UpdateOrderComponent implements OnInit {
     });
     await this.orderService.orderContext$.subscribe((val) => {
       this.orderContext = val;
+      if (this.orderContext != null) {
+        this.getCustomerContext();
+        this.populateOrderForm();
+      }
     });
     await this.orderService.eventTypesContext$.subscribe((value) => {
       this.eventTypesContext = value;
+      if (value == null) {
+        this.orderService.getEventTypes().subscribe((res) => {
+          this.orderService.setEventsContext(res);
+        });
+      }
     });
     await this.orderService.orderItemsContext$.subscribe((value) => {
       if (value != null) this.orderItems = value;
     });
     await this.customerService.customerContext$.subscribe((value) => {
       this.customerContext = value;
+      if (value != null) this.loadAddresses();
     });
-
     await this.customerService.addressContext$.subscribe((value) => {
       this.addressContext = value;
-      if (value == null && this.customerContext != null) this.loadAddresses();
+      this.selectedShippingAddress = this.addressContext?.find(
+        (a) => a.id == this.orderContext?.shippedToAddressId
+      );
+    });
+
+    this.deliveryWindowForm = this.fb.group({
+      startTime: [new Date(), Validators.required],
+      endTime: [new Date(), Validators.required],
+    });
+    this.pickupWindowForm = this.fb.group({
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
     });
 
     this.orderItemForm = this.fb.group({
@@ -121,19 +142,9 @@ export class UpdateOrderComponent implements OnInit {
       paymentTerms: [this.orderContext?.paymentTerms, Validators.required],
     });
 
-    this.selectedShippingAddress = this.addressContext?.find(
-      (a) => a.id == this.orderContext?.shippedToAddressId
-    );
-
-    this.specifyDeliverTimes = this.orderContext?.deliveryWindow != null;
-    this.specifyPickupTimes = this.orderContext?.pickupWindow != null;
-
-    if (this.orderContext?.deliveryWindow != undefined)
-      this.tempDeliveryTimes = this.orderContext?.deliveryWindow;
-    if (this.orderContext?.pickupWindow != undefined)
-      this.tempPickupTimes = this.orderContext?.pickupWindow;
-
-    this.isLoading = false;
+    if (this.orderContext == null) {
+      await this.getOrderContext();
+    }
 
     this.inventoryService.getInventoryCategories().subscribe((res) => {
       this.itemCategories = res;
@@ -149,6 +160,69 @@ export class UpdateOrderComponent implements OnInit {
         value: PaymentTerms[key as keyof typeof PaymentTerms],
         label: key,
       }));
+    this.isLoading = false;
+  }
+
+  populateOrderForm() {
+    if (this.orderContext != null) {
+      this.orderForm?.patchValue({
+        eventDate: this.orderContext.eventDate,
+        eventTypeId: this.orderContext.eventTypeId,
+        billedToCustomerId: this.orderContext.billedToCustomerId,
+        billedToAddressId: this.orderContext.billedToAddressId,
+        shippedToAddressId: this.orderContext.shippedToAddressId,
+        amount: this.orderContext.amount,
+        balanceDue: this.orderContext.balanceDue,
+        taxRate: this.orderContext.taxRate,
+        deliveryPickupNotes: this.orderContext.deliveryPickupNotes,
+        discount: this.orderContext.discount,
+        paymentTerms: this.orderContext.paymentTerms,
+      });
+
+      this.initialValues = { ...this.orderContext };
+      this.orderForm?.markAsPristine();
+
+      this.specifyDeliverTimes =
+        (this.orderContext.deliveryWindow?.length ?? 0) > 0;
+      this.specifyPickupTimes =
+        (this.orderContext.pickupWindow?.length ?? 0) > 0;
+
+      if ((this.orderContext.deliveryWindow?.length ?? 0) > 0)
+        this.tempDeliveryTimes = this.orderContext.deliveryWindow ?? [];
+      if ((this.orderContext.pickupWindow?.length ?? 0) > 0)
+        this.tempPickupTimes = this.orderContext.pickupWindow ?? [];
+    }
+  }
+
+  async getOrderContext() {
+    this.isLoading = true;
+
+    if (this.orderId != null) {
+      console.log('getting order data');
+      this.orderService.getOrderById(this.orderId).subscribe((o) => {
+        this.orderService.setOrderContext(o);
+      });
+      this.orderService.getOrderItems(this.orderId).subscribe((o) => {
+        this.orderService.setOrderItemsContext(o);
+      });
+    }
+
+    this.isLoading = false;
+  }
+
+  async getCustomerContext() {
+    if (this.orderContext != null) {
+      this.customerService
+        .getCustomer(this.orderContext.billedToCustomerId)
+        .subscribe((c) => {
+          this.customerService.setCustomerContext(c);
+        });
+      this.customerService
+        .getAddresses(this.customerContext!.id)
+        .subscribe((a) => {
+          this.customerService.setaddressContext(a);
+        });
+    }
   }
 
   get f() {
@@ -197,16 +271,20 @@ export class UpdateOrderComponent implements OnInit {
   calculateOrderTotal(): number {
     let subTotal = this.calcualteSubTotal();
     let withShipping = subTotal + this.shippingRates[3];
-    let orderTotal = withShipping * this.orderForm?.get('taxRate')?.value;
+    let orderTotal =
+      withShipping + withShipping * this.orderForm?.get('taxRate')?.value;
     return orderTotal;
   }
   calcualteSubTotal(): number {
     let total = 0;
-    this.orderItems.forEach(
-      (i) =>
-        (total +=
-          i.qty * this.inventoryItems.find((ii) => ii.id == i.id)?.price!)
-    );
+    if (this.orderItems.length != 0 && this.items.length != 0) {
+      this.orderItems.forEach((orderItem) => {
+        const founditem = this.items.find(
+          (inventory) => inventory.id == orderItem.itemId
+        );
+        total += founditem?.price! * orderItem.qty;
+      });
+    }
     return total;
   }
 
@@ -321,8 +399,17 @@ export class UpdateOrderComponent implements OnInit {
       });
   }
 
+  isFormDirty(): boolean {
+    if (!this.initialValues) return false;
+    const currentValues = this.orderForm?.value;
+    if (!currentValues || !this.initialValues) return false;
+
+    return (Object.keys(currentValues) as (keyof Order)[]).some(
+      (key) => currentValues[key] !== this.initialValues![key]
+    );
+  }
+
   onSubmit() {
-    console.log('made it');
-    console.log(this.orderForm?.value);
+    console.log('is order form dirty: ', this.isFormDirty());
   }
 }
