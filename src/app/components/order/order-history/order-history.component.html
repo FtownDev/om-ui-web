@@ -1,0 +1,46 @@
+<div class="justify-center min-h-screen">
+  <div class="container min-h-full max-w-[525px] lg:max-w-6xl p-4 md:p-2">
+    <div
+      class="max-w-2xl mx-auto bg-light-fill dark:bg-dark-section p-8 rounded-sm shadow-lg"
+    >
+      @if(this.isLoading) {
+      <div
+        id="loading-overlay"
+        class="h-screen w-full flex items-center justify-center bg-light-heading bg-opacity-10 z-50 rounded-md"
+      >
+        <div
+          class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"
+        ></div>
+      </div>
+      } @else if (this.orderId != null) {
+      <div class="flex flex-col items-center justify-center">
+        Order Id is null
+      </div>
+
+      } @else if(this.orderHistory.length == 0) {
+      <p>List is empty</p>
+      } @else { @for(historyItem of this.orderHistory; track historyItem.id) {
+      <div
+        class="flex gap-3 bg-light-section shadow-sm p-3 border-2 border-light-heading"
+      >
+        <p class="text-sm text-light-content dark:text-dark-content">
+          Change Date: {{ historyItem.changedAt | date : "EE MMM dd" : "UTC" }}
+        </p>
+
+        <p class="text-sm text-light-content dark:text-dark-content">
+          Field Name: {{ historyItem.propertyName }}
+        </p>
+        <p class="text-sm text-light-content dark:text-dark-content">
+          Old Value: {{ historyItem.changedFrom }}
+        </p>
+        <p class="text-sm text-light-content dark:text-dark-content">
+          New Value: {{ historyItem.changedTo }}
+        </p>
+        <p class="text-sm text-light-content dark:text-dark-content">
+          Changed By: {{ historyItem.changedByUserId.substring(0, 5) }}
+        </p>
+      </div>
+      } }
+    </div>
+  </div>
+</div>

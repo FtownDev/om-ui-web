@@ -38,11 +38,13 @@ import {
   bootstrapTable,
   bootstrapPersonSquare,
   bootstrapPencilSquare,
+  bootstrapClockHistory,
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
 import { SelectCustomerComponent } from './components/order/select-customer/select-customer.component';
 import { OrderStatusDisplayComponent } from './components/order/order-status-display/order-status-display.component';
 import { UpdateOrderComponent } from './components/order/update-order/update-order.component';
+import { OrderHistoryComponent } from './components/order/order-history/order-history.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,7 @@ import { UpdateOrderComponent } from './components/order/update-order/update-ord
     SelectCustomerComponent,
     OrderStatusDisplayComponent,
     UpdateOrderComponent,
+    OrderHistoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,6 +84,7 @@ import { UpdateOrderComponent } from './components/order/update-order/update-ord
       bootstrapTable,
       bootstrapPersonSquare,
       bootstrapPencilSquare,
+      bootstrapClockHistory,
     }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],

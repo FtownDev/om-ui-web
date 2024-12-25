@@ -75,6 +75,10 @@ export class OrderDetailComponent implements OnInit {
     this.router.navigate(['/orders', this.orderContext?.id, 'update']);
   }
 
+  async navigateToOrderHistory() {
+    this.router.navigate(['/orders', this.orderContext?.id, 'history']);
+  }
+
   getCustomerAddresses() {
     this.customerService
       .getAddresses(this.customerContext!.id)

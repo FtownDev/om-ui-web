@@ -11,6 +11,7 @@ import { EventType } from '../models/Order/EventType';
 import { Order } from '../models/Order/Order';
 import { OrderCreateRequest } from '../models/Order/OrderCreateRequest';
 import { OrderItem } from '../models/Order/OrderItem';
+import { OrderHistory } from '../models/Order/OrderHistory';
 
 @Injectable({
   providedIn: 'root',
@@ -116,6 +117,14 @@ export class OrderService {
         map((response) => response),
         catchError(this.handleError)
       );
+  }
+
+  getOrderHistory(orderId: string): Observable<OrderHistory[]> {
+    let requestUrl = `${this.API_URL}/orders/${orderId}/history`;
+    return this.httpClient.get<OrderHistory[]>(requestUrl).pipe(
+      map((response) => response),
+      catchError(this.handleError)
+    );
   }
 
   private handleError(error: HttpErrorResponse) {
