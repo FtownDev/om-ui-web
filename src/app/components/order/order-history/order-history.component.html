@@ -23,27 +23,27 @@
       <table class="w-full leading-normal mt-2">
         <thead>
           <tr
-            class="bg-light-section rounded-md dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
+            class="bg-light-section rounded-md dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-xs font-semibold"
           >
             <th
-              class="pr-3 py-3 border-b-2 border-light-border dark:border-dark-border text-center"
+              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
             >
               Date
             </th>
 
             <th
-              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-center"
+              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
             >
               Field Changed
             </th>
             <th
-              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-center"
+              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
             >
               Old Value
             </th>
 
             <th
-              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-center"
+              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
             >
               New Value
             </th>
@@ -59,60 +59,69 @@
         <tr
           class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
         >
-          <td class="px-1.5 py-2 text-sm text-center">
+          <td class="px-1.5 py-2 text-xs text-left">
             {{ historyItem.changedAt | date : "EE MMM dd" : "UTC" }}
           </td>
-          <td class="px-1.5 py-2 text-sm text-center">
+          <td class="px-1.5 py-2 text-xs text-left">
             {{ historyItem.propertyName }}
           </td>
-          <td class="px-1.5 py-2 text-sm text-center">
-            @switch(historyItem.propertyName) { @case ("DeliveryWindow") {
-            @if(historyItem.changedFrom.length > 0) { @for(window of
-            getParedDate(historyItem.changedFrom); track $index) {
-            <div class="flex">
-              - @for(date of window; track $index) {
-              {{ date | date : "EE MMM dd" : "UTC" }}, }
-            </div>
-            } } } @case ("PickupWindow") { @if(historyItem.changedFrom.length >
-            0) { @for(window of getParedDate(historyItem.changedFrom); track
-            $index) {
-            <div class="flex">
-              - @for(date of window; track $index) {
-              {{ date | date : "EE MMM dd" : "UTC" }}, }
-            </div>
-            } }} @case ("EventTypeId") {
-            {{ this.getEventType(historyItem.changedFrom) }}
-            } @case ("EventDate") {
-            {{ historyItem.changedFrom | date : "EE. MMM dd, yyyy" : "UTC" }}
-            } @case ("ShippedToAddressId") {
-            {{ this.getAddress(historyItem.changedFrom) }}
-            } @default {
-            {{ historyItem.changedFrom }}
-            } }
+          <td class="px-1.5 py-2 text-xs text-left">
+            <span
+              class="relative text-red-500 line-through decoration-2 opacity-80 group text-left"
+            >
+              @switch(historyItem.propertyName) { @case ("DeliveryWindow") {
+              @if(historyItem.changedFrom.length > 0) { @for(window of
+              getParedDate(historyItem.changedFrom); track $index) {
+              <div class="flex">
+                @for(date of window; track $index) {
+                {{ date | date : "EE MMM dd" : "UTC" }}, }
+              </div>
+              } } } @case ("PickupWindow") { @if(historyItem.changedFrom.length
+              > 0) { @for(window of getParedDate(historyItem.changedFrom); track
+              $index) {
+              <div class="flex">
+                - @for(date of window; track $index) {
+                {{ date | date : "EE MMM dd" : "UTC" }}, }
+              </div>
+              } }} @case ("EventTypeId") {
+              {{ this.getEventType(historyItem.changedFrom) }}
+              } @case ("EventDate") {
+              {{ historyItem.changedFrom | date : "EE. MMM dd, yyyy" : "UTC" }}
+              } @case ("ShippedToAddressId") {
+              {{ this.getAddress(historyItem.changedFrom) }}
+              } @default {
+              {{ historyItem.changedFrom }}
+              } }
+              <span
+                class="bottom-0 left-0 w-full h-0.5 bg-red-500 origin-left"
+              ></span>
+            </span>
           </td>
-          <td class="px-1.5 py-2 text-sm text-center">
-            @switch(historyItem.propertyName) { @case ("DeliveryWindow") {
-            @if(historyItem.changedTo.length > 0) { @for(window of
-            getParedDate(historyItem.changedTo); track $index) { @for(date of
-            window; track $index) {
-            {{ date | date : "EE MMM dd" : "UTC" }}, } } } } @case
-            ("PickupWindow") { @for(window of
-            getParedDate(historyItem.changedTo); track $index) {
-            <div class="flex">
-              @for(date of window; track $index) {
-              {{ date | date : "EE MMM dd" : "UTC" }}, }
-            </div>
-            } } @case ("EventTypeId") {
-            {{ this.getEventType(historyItem.changedTo) }}
-            } @case ("EventDate") {
-            {{ historyItem.changedTo | date : "EE. MMM dd, yyyy" : "UTC" }}
-            } @case ("ShippedToAddressId") {
-            {{ this.getAddress(historyItem.changedTo) }}
-            } @default {
-            {{ historyItem.changedTo }}
-            } }
+          <td class="px-1.5 py-2 text-xs text-left">
+            <span class="inline-block text-green-600 bg-green-100 rounded px-1">
+              @switch(historyItem.propertyName) { @case ("DeliveryWindow") {
+              @if(historyItem.changedTo.length > 0) { @for(window of
+              getParedDate(historyItem.changedTo); track $index) { @for(date of
+              window; track $index) {
+              {{ date | date : "EE MMM dd" : "UTC" }}, } } } } @case
+              ("PickupWindow") { @for(window of
+              getParedDate(historyItem.changedTo); track $index) {
+              <div class="flex">
+                @for(date of window; track $index) {
+                {{ date | date : "EE MMM dd" : "UTC" }}, }
+              </div>
+              } } @case ("EventTypeId") {
+              {{ this.getEventType(historyItem.changedTo) }}
+              } @case ("EventDate") {
+              {{ historyItem.changedTo | date : "EE. MMM dd, yyyy" : "UTC" }}
+              } @case ("ShippedToAddressId") {
+              {{ this.getAddress(historyItem.changedTo) }}
+              } @default {
+              {{ historyItem.changedTo }}
+              } }
+            </span>
           </td>
-          <td class="px-1.5 py-2 text-sm text-center">
+          <td class="px-1.5 py-2 text-xs text-center">
             {{ historyItem.changedByUserId.substring(0, 5) }}
           </td>
         </tr>
