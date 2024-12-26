@@ -79,6 +79,9 @@ export class OrderHistoryComponent implements OnInit {
         this.orderHistory = val;
         this.isLoading = false;
       });
+      this.orderService.getOrderById(this.orderId).subscribe((val) => {
+        this.orderService.setOrderContext(val);
+      });
     }
   }
 
@@ -90,6 +93,40 @@ export class OrderHistoryComponent implements OnInit {
       });
   }
 
+  getEventType(eventId: string): string {
+    if (this.eventTypesContext != null) {
+      const eventType = this.eventTypesContext.find((e) => e.id === eventId);
+      if (eventType != null) {
+        return eventType.name;
+      }
+    }
+    return '';
+  }
+
+  getAddress(addressId: string): string {
+    if (this.addressContext != null) {
+      const address = this.addressContext.find((a) => a.id === addressId);
+      if (address != null) {
+        return (
+          address.street1 +
+          (address.street2 != null ? ' ' + address.street2 : null) +
+          ' ' +
+          address.dependentLocality +
+          ', ' +
+          address.locale +
+          ' ' +
+          address.postalCode
+        );
+      }
+    }
+    return '';
+  }
+
+  getParedDate(dateString: string): string[][] {
+    return dateString
+      .split(';')
+      .map((group) => group.split(',').map((dateStr) => dateStr.trim()));
+  }
   async getCustomerContext() {
     if (this.orderContext != null) {
       this.customerService
