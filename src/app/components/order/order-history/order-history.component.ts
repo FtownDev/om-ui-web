@@ -11,6 +11,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { OrderHistory } from '@/src/app/models/Order/OrderHistory';
+import { FieldNameDisplay } from '@/src/app/utils/FieldNameDisplay';
 
 @Component({
   selector: 'app-order-history',
@@ -23,6 +24,13 @@ export class OrderHistoryComponent implements OnInit {
   // Flags
   error = false;
   isLoading = false;
+
+  // Tabs
+  tabs = [
+    { label: 'Details', badge: null },
+    { label: 'Items', badge: null },
+  ];
+  activeTab = 0;
 
   // Services
   customerService = inject(CustomerService);
@@ -42,6 +50,9 @@ export class OrderHistoryComponent implements OnInit {
   // Inventory
   itemCategories: InventoryCategory[] = [];
   items: InventoryItem[] = [];
+
+  // Mappings
+  fieldNameDisplay = FieldNameDisplay;
 
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
