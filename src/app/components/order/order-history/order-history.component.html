@@ -3,7 +3,7 @@
     <div class="flex border-b border-gray-200">
       <button
         *ngFor="let tab of tabs; let i = index"
-        (click)="activeTab = i"
+        (click)="selectTab(i)"
         [class]="
           'px-6 py-3 text-sm font-medium rounded-t-lg transition-all duration-200 border-2 border-b-0' +
           (activeTab === i
@@ -43,7 +43,7 @@
         Order Id is null
       </div>
 
-      } @else if(this.orderHistory.length == 0) {
+      } @else { @if(this.activeTab === 0) { @if(this.orderHistory.length == 0) {
       <p>List is empty</p>
       } @else {
       <table class="w-full leading-normal mt-2">
@@ -156,7 +156,75 @@
         </tr>
         } }
       </table>
-      }
+      } }@else if(this.activeTab === 1) {
+      <table class="w-full leading-normal mt-2">
+        <thead>
+          <tr
+            class="bg-light-section rounded-md dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
+          >
+            <th
+              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+            >
+              Date
+            </th>
+
+            <th
+              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+            >
+              Item
+            </th>
+            <th
+              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+            >
+              Old Value
+            </th>
+
+            <th
+              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
+            >
+              New Value
+            </th>
+            <th
+              class="px-3 py-3 border-b-2 border-light-border dark:border-dark-border text-center"
+            >
+              Changed By
+            </th>
+          </tr>
+        </thead>
+        @for(itemHistory of this.orderItemHistory; track itemHistory.id) {
+
+        <tr
+          class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
+        >
+          <td class="px-1.5 py-2 text-sm text-left">
+            {{ itemHistory.changedDate | date : "EE MMM dd" : "UTC" }}
+          </td>
+          <td class="px-1.5 py-2 text-sm text-left">
+            {{ getItemDisplayName(itemHistory.itemId) || itemHistory.itemId }}
+          </td>
+          <td class="px-1.5 py-2 text-sm text-left">
+            <span
+              class="relative text-red-500 line-through decoration-2 opacity-80 group text-left"
+            >
+              {{ itemHistory.oldQuantity }}
+
+              <span
+                class="bottom-0 left-0 w-full h-0.5 bg-red-500 origin-left"
+              ></span>
+            </span>
+          </td>
+          <td class="px-1.5 py-2 text-sm text-left">
+            <span class="inline-block text-green-600 bg-green-100 rounded px-1">
+              {{ itemHistory.newQuantity }}
+            </span>
+          </td>
+          <td class="px-1.5 py-2 text-sm text-center">
+            {{ itemHistory.changedByUserId.substring(0, 5) }}
+          </td>
+        </tr>
+        }
+      </table>
+      } }
     </div>
   </div>
 </div>

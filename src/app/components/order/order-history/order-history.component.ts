@@ -12,6 +12,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { OrderHistory } from '@/src/app/models/Order/OrderHistory';
 import { FieldNameDisplay } from '@/src/app/utils/FieldNameDisplay';
+import { OrderItemHistory } from '@/src/app/models/Order/OrderItemHistory';
+import { OrderItemChangeType } from '@/src/app/models/Order/OrderItemChangeType';
 
 @Component({
   selector: 'app-order-history',
@@ -46,6 +48,8 @@ export class OrderHistoryComponent implements OnInit {
   eventTypesContext: EventType[] | null = null;
   customerContext: Customer | null = null;
   orderHistory: OrderHistory[] = [];
+  orderItemHistory: OrderItemHistory[] = [];
+  changeType = OrderItemChangeType;
 
   // Inventory
   itemCategories: InventoryCategory[] = [];
@@ -84,14 +88,40 @@ export class OrderHistoryComponent implements OnInit {
     });
   }
 
+  selectTab(index: number) {
+    this.activeTab = index;
+    if (index === 1 && this.orderItemHistory.length == 0) {
+      this.loadItemHistory();
+    }
+  }
+
   loadHistory() {
     if (this.orderId != null) {
       this.orderService.getOrderHistory(this.orderId).subscribe((val) => {
+        console.log('OrderHistory: ', val);
         this.orderHistory = val;
-        this.isLoading = false;
       });
       this.orderService.getOrderById(this.orderId).subscribe((val) => {
         this.orderService.setOrderContext(val);
+      });
+      this.isLoading = false;
+    }
+  }
+
+  loadItemHistory() {
+    this.isLoading = true;
+    this.inventoryService.getInventoryCategories().subscribe((res) => {
+      this.itemCategories = res;
+    });
+
+    this.inventoryService.getInventoryItems().subscribe((res) => {
+      this.items = res;
+    });
+    if (this.orderId != null) {
+      this.orderService.getOrderItemHistory(this.orderId).subscribe((val) => {
+        console.log('ItemHistory: ', val);
+        this.orderItemHistory = val;
+        this.isLoading = false;
       });
     }
   }
@@ -102,6 +132,12 @@ export class OrderHistoryComponent implements OnInit {
       .subscribe((val) => {
         this.customerService.setaddressContext(val);
       });
+  }
+
+  getItemDisplayName(itemId: string): string {
+    const item = this.items.find((i) => i.id === itemId);
+    const category = this.itemCategories.find((c) => c.id === item?.categoryId);
+    return item?.name + ' - ' + category?.name;
   }
 
   getEventType(eventId: string): string {

@@ -12,6 +12,7 @@ import { Order } from '../models/Order/Order';
 import { OrderCreateRequest } from '../models/Order/OrderCreateRequest';
 import { OrderItem } from '../models/Order/OrderItem';
 import { OrderHistory } from '../models/Order/OrderHistory';
+import { OrderItemHistoryCreateRequest } from '../models/Order/OrderItemHistoryCreateRequest';
 import { OrderItemHistory } from '../models/Order/OrderItemHistory';
 
 @Injectable({
@@ -129,13 +130,21 @@ export class OrderService {
   }
 
   updateOrderItems(
-    updatedItems: OrderItemHistory[],
+    updatedItems: OrderItemHistoryCreateRequest[],
     orderId: string,
     userId: string
   ): Observable<any> {
     let requestUrl = `${this.API_URL}/orders/${orderId}/items?userId=${userId}`;
     let requestBody = JSON.stringify(updatedItems);
     return this.httpClient.put(requestUrl, requestBody, this.httpOptions).pipe(
+      map((response) => response),
+      catchError(this.handleError)
+    );
+  }
+
+  getOrderItemHistory(orderId: string): Observable<OrderItemHistory[]> {
+    let requestUrl = `${this.API_URL}/orders/${orderId}/items/history`;
+    return this.httpClient.get<OrderItemHistory[]>(requestUrl).pipe(
       map((response) => response),
       catchError(this.handleError)
     );

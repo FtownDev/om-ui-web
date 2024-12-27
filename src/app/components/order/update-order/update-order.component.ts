@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventType } from '@/src/app/models/Order/EventType';
 import { PaymentTerms } from '@/src/app/models/Order/PaymentTerms';
 import { ShippingRates } from '@/src/app/models/Order/ShippingRates';
-import { OrderItemHistory } from '@/src/app/models/Order/OrderItemHistory';
+import { OrderItemHistoryCreateRequest } from '@/src/app/models/Order/OrderItemHistoryCreateRequest';
 import { OrderItemChangeType } from '@/src/app/models/Order/OrderItemChangeType';
 
 @Component({
@@ -75,7 +75,7 @@ export class UpdateOrderComponent implements OnInit {
   selectedShippingAddress: Address | undefined;
   tempDeliveryTimes: string[][] = [];
   tempPickupTimes: string[][] = [];
-  itemsChangeList: OrderItemHistory[] = [];
+  itemsChangeList: OrderItemHistoryCreateRequest[] = [];
 
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
@@ -250,7 +250,7 @@ export class UpdateOrderComponent implements OnInit {
   }
 
   addOrderItem() {
-    let itemChange: OrderItemHistory;
+    let itemChange: OrderItemHistoryCreateRequest;
     if (this.orderItemForm!.valid) {
       const formVal = this.orderItemForm?.value;
       const existingItem = this.orderItems.find(
@@ -284,10 +284,10 @@ export class UpdateOrderComponent implements OnInit {
   }
 
   removeOrderItem(itemId: string) {
-    const itemChange: OrderItemHistory = {
+    const itemChange: OrderItemHistoryCreateRequest = {
       itemId: itemId,
       qty: 0,
-      changeType: OrderItemChangeType.Removed,
+      changeType: OrderItemChangeType.Deleted,
     };
     this.itemsChangeList.push(itemChange);
     this.orderItems = this.orderItems.filter((i) => i.itemId != itemId);
@@ -513,16 +513,19 @@ export class UpdateOrderComponent implements OnInit {
     }
 
     if (this.itemsChangeList.length > 0) {
-      console.log('updated order items: ', this.itemsChangeList);
-      // this.orderService
-      //   .updateOrderItems(
-      //     this.itemsChangeList,
-      //     this.orderContext?.id ?? '',
-      //     crypto.randomUUID()
-      //   )
-      //   .subscribe((res) => {
-      //     console.log(res);
-      //   });
+      console.log(
+        'updated order items: ',
+        JSON.stringify(this.itemsChangeList)
+      );
+      this.orderService
+        .updateOrderItems(
+          this.itemsChangeList,
+          this.orderContext?.id ?? '',
+          crypto.randomUUID()
+        )
+        .subscribe((res) => {
+          console.log(res);
+        });
     }
   }
 }
