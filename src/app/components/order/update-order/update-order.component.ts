@@ -13,6 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 import { EventType } from '@/src/app/models/Order/EventType';
 import { PaymentTerms } from '@/src/app/models/Order/PaymentTerms';
 import { ShippingRates } from '@/src/app/models/Order/ShippingRates';
+import { OrderItemHistory } from '@/src/app/models/Order/OrderItemHistory';
+import { OrderItemChangeType } from '@/src/app/models/Order/OrderItemChangeType';
 
 @Component({
   selector: 'app-update-order',
@@ -73,6 +75,7 @@ export class UpdateOrderComponent implements OnInit {
   selectedShippingAddress: Address | undefined;
   tempDeliveryTimes: string[][] = [];
   tempPickupTimes: string[][] = [];
+  itemsChangeList: OrderItemHistory[] = [];
 
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
@@ -247,17 +250,47 @@ export class UpdateOrderComponent implements OnInit {
   }
 
   addOrderItem() {
+    let itemChange: OrderItemHistory;
     if (this.orderItemForm!.valid) {
-      const formVal = this.orderItemForm!.value;
-      const newItem: OrderItem = {
-        itemId: formVal.itemId,
-        qty: formVal.qty,
-        orderId: this.orderContext!.id!,
-      };
+      const formVal = this.orderItemForm?.value;
+      const existingItem = this.orderItems.find(
+        (i) => i.itemId == formVal.itemId
+      );
+      if (existingItem) {
+        existingItem.qty += formVal.qty;
+        itemChange = {
+          itemId: existingItem.itemId,
+          qty: existingItem.qty,
+          changeType: OrderItemChangeType.Updated,
+        };
+      } else {
+        const newItem: OrderItem = {
+          itemId: formVal.itemId,
+          qty: formVal.qty,
+          orderId: this.orderContext!.id!,
+        };
 
-      this.orderItems.push(newItem);
+        itemChange = {
+          itemId: newItem.itemId,
+          qty: newItem.qty,
+          changeType: OrderItemChangeType.Added,
+        };
+
+        this.orderItems.push(newItem);
+      }
+      this.itemsChangeList.push(itemChange);
       this.orderItemForm?.reset({ itemId: '', categoryId: '', qty: '' });
     }
+  }
+
+  removeOrderItem(itemId: string) {
+    const itemChange: OrderItemHistory = {
+      itemId: itemId,
+      qty: 0,
+      changeType: OrderItemChangeType.Removed,
+    };
+    this.itemsChangeList.push(itemChange);
+    this.orderItems = this.orderItems.filter((i) => i.itemId != itemId);
   }
 
   onItemCategoryChange(event: any) {
@@ -477,6 +510,19 @@ export class UpdateOrderComponent implements OnInit {
           console.log(res);
           this.orderService.setOrderContext(res);
         });
+    }
+
+    if (this.itemsChangeList.length > 0) {
+      console.log('updated order items: ', this.itemsChangeList);
+      // this.orderService
+      //   .updateOrderItems(
+      //     this.itemsChangeList,
+      //     this.orderContext?.id ?? '',
+      //     crypto.randomUUID()
+      //   )
+      //   .subscribe((res) => {
+      //     console.log(res);
+      //   });
     }
   }
 }

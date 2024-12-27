@@ -481,6 +481,7 @@
               <tr
                 class="bg-light-section rounded-md dark:bg-dark-section text-light-heading dark:text-dark-heading uppercase text-sm font-semibold"
               >
+                <th>{{ " " }}</th>
                 <th
                   class="pr-3 pl-16 py-3 border-b-2 border-light-border dark:border-dark-border text-left"
                 >
@@ -511,6 +512,13 @@
             <tr
               class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
             >
+              <td>
+                <ng-icon
+                  class="text-md p-4 text-light-error"
+                  name="bootstrapTrash3"
+                  (click)="this.removeOrderItem(item.itemId)"
+                />
+              </td>
               <td class="pr-3 pl-16 py-2 text-sm text-left">
                 {{ getItemCategoryName(item.itemId) }} -
                 {{ getItemName(item.itemId) }}

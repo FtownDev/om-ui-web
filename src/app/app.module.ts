@@ -39,6 +39,7 @@ import {
   bootstrapPersonSquare,
   bootstrapPencilSquare,
   bootstrapClockHistory,
+  bootstrapTrash3,
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
 import { SelectCustomerComponent } from './components/order/select-customer/select-customer.component';
@@ -85,6 +86,7 @@ import { OrderHistoryComponent } from './components/order/order-history/order-hi
       bootstrapPersonSquare,
       bootstrapPencilSquare,
       bootstrapClockHistory,
+      bootstrapTrash3,
     }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
