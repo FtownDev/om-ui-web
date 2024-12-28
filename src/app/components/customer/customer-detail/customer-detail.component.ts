@@ -39,4 +39,14 @@ export class CustomerDetailComponent implements OnInit {
       this.customerService.setaddressContext(value);
     });
   }
+
+  getAddressDisplay(addressId: string): string {
+    if (this.addressContext && this.addressContext.length > 0) {
+      const a = this.addressContext.find((a) => a.id === addressId);
+      if (a) {
+        return `${a.street1} ${a.street2} ${a.dependentLocality}, ${a.locale} ${a.postalCode}`;
+      }
+    }
+    return '';
+  }
 }

@@ -40,6 +40,12 @@ import {
   bootstrapPencilSquare,
   bootstrapClockHistory,
   bootstrapTrash3,
+  bootstrapEnvelopeAt,
+  bootstrapTelephone,
+  bootstrapTelephonePlus,
+  bootstrapVoicemail,
+  bootstrapGeoAlt,
+  bootstrapCalendar2Check,
 } from '@ng-icons/bootstrap-icons';
 import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
 import { SelectCustomerComponent } from './components/order/select-customer/select-customer.component';
@@ -87,6 +93,12 @@ import { OrderHistoryComponent } from './components/order/order-history/order-hi
       bootstrapPencilSquare,
       bootstrapClockHistory,
       bootstrapTrash3,
+      bootstrapEnvelopeAt,
+      bootstrapTelephone,
+      bootstrapTelephonePlus,
+      bootstrapVoicemail,
+      bootstrapGeoAlt,
+      bootstrapCalendar2Check,
     }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],

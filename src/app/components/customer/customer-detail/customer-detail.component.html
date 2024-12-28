@@ -1,6 +1,8 @@
 <div class="justify-center min-h-screen">
-  <div class="container min-h-full max-w-[625px] lg:max-w-6xl p-1 md:p-2">
-    <div class="mt-8 bg-light-fill dark:bg-dark-section rounded-sm shadow-lg">
+  <div class="container min-h-full max-w-[525px] lg:max-w-4xl p-1 md:p-2">
+    <div
+      class="mt-8 bg-light-fill dark:bg-dark-section rounded-lg shadow-lg overflow-hidden"
+    >
       @if(this.isLoading) {
       <div
         id="loading-overlay"
@@ -12,8 +14,141 @@
       </div>
       } @else if (this.customerContext == null) {
       <div class="flex items-center justify-center">Customer is null</div>
-      } @else { Viewing Customer {{ customerContext.firstName }}
-      {{ customerContext.lastName }}
+      } @else {
+
+      <div
+        class="flex justify-between bg-light-accent dark:bg-dark-accent px-6 items-center"
+      >
+        <h2
+          class="text-2xl font-semibold text-light-heading dark:text-dark-heading p-4 py-6"
+        >
+          Customer Details
+        </h2>
+
+        <div class="flex items-center">
+          <span
+            class="px-3 py-1 text-md font-medium text-slate-800 bg-slate-300 border border-slate-600 rounded-full"
+          >
+            {{ this.customerContext.id.substring(0, 7) }}
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col p-6 gap-y-4">
+        <div class="flex items-center space-x-3">
+          <ng-icon class="text-4xl ml-1" name="bootstrapPerson" />
+          <div class="ml-1">
+            <p
+              class="text-sm text-light-heading dark:text-dark-heading opacity-80"
+            >
+              Name
+            </p>
+            <p
+              class="font-medium text-lg text-light-content dark:text-dark-content"
+            >
+              {{
+                this.customerContext.firstName +
+                  " " +
+                  this.customerContext.lastName
+              }}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <ng-icon class="text-3xl ml-2" name="bootstrapEnvelopeAt" />
+          <div>
+            <p
+              class="text-sm text-light-heading dark:text-dark-heading opacity-80"
+            >
+              Email
+            </p>
+            <p
+              class="font-medium text-lg text-light-content dark:text-dark-content"
+            >
+              {{ this.customerContext.email }}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <ng-icon class="text-3xl ml-2" name="bootstrapTelephone" />
+          <div>
+            <p
+              class="text-sm text-light-heading dark:text-dark-heading opacity-80"
+            >
+              Primary Phone
+            </p>
+            <p
+              class="font-medium text-lg text-light-content dark:text-dark-content"
+            >
+              {{ this.customerContext.primaryPhone }}
+            </p>
+          </div>
+        </div>
+        @if(this.customerContext.secondaryPhone) {
+        <div class="flex items-center space-x-4">
+          <ng-icon class="text-3xl ml-2" name="bootstrapTelephonePlus" />
+          <div>
+            <p
+              class="text-sm text-light-heading dark:text-dark-heading opacity-80"
+            >
+              Secondary Phone
+            </p>
+            <p
+              class="font-medium text-lg text-light-content dark:text-dark-content"
+            >
+              {{ this.customerContext.secondaryPhone }}
+            </p>
+          </div>
+        </div>
+        } @if(this.customerContext.fax) {
+        <div class="flex items-center space-x-4">
+          <ng-icon class="text-3xl ml-2" name="bootstrapVoicemail" />
+          <div>
+            <p
+              class="text-sm text-light-heading dark:text-dark-heading opacity-80"
+            >
+              Fax
+            </p>
+            <p
+              class="font-medium text-lg text-light-content dark:text-dark-content"
+            >
+              {{ this.customerContext.fax }}
+            </p>
+          </div>
+        </div>
+        }
+        <div class="flex items-center space-x-4">
+          <ng-icon class="text-3xl ml-2" name="bootstrapGeoAlt" />
+          <div>
+            <p
+              class="text-sm text-light-heading dark:text-dark-heading opacity-80"
+            >
+              Billing Address
+            </p>
+            <p
+              class="font-medium text-lg text-light-content dark:text-dark-content"
+            >
+              {{ getAddressDisplay(this.customerContext.billingAddressId) }}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <ng-icon class="text-3xl ml-2" name="bootstrapCalendar2Check" />
+          <div>
+            <p
+              class="text-sm text-light-heading dark:text-dark-heading opacity-80"
+            >
+              Created
+            </p>
+            <p
+              class="font-medium text-lg text-light-content dark:text-dark-content"
+            >
+              {{ this.customerContext.created | date : "medium" }}
+            </p>
+          </div>
+        </div>
+      </div>
+
       }
     </div>
   </div>
