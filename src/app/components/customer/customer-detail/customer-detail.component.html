@@ -29,11 +29,11 @@
           <span
             class="px-3 py-1 text-md font-medium text-slate-800 bg-slate-300 border border-slate-600 rounded-full"
           >
-            {{ this.customerContext.id.substring(0, 7) }}
+            Id: {{ this.customerContext.id.substring(0, 7) }}
           </span>
         </div>
       </div>
-      <div class="flex flex-col p-6 gap-y-4">
+      <div class="flex flex-col px-6 py-3 gap-y-4">
         <div class="flex items-center space-x-3">
           <ng-icon class="text-4xl ml-1" name="bootstrapPerson" />
           <div class="ml-1">
@@ -146,6 +146,29 @@
               {{ this.customerContext.created | date : "medium" }}
             </p>
           </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col px-6 py-3">
+        <h2 class="text-xl text-light-heading dark:text-dark-heading py-3">
+          Shipping Addresses:
+        </h2>
+        <div class="flex flex-col gap-y-4">
+          @for(address of this.addressContext; track $index) {
+          <div class="flex rounded-md bg-light-input dark:bg-dark-input p-4">
+            <p class="text-md text-light-content dark:text-dark-content">
+              {{
+                address.street1 +
+                  (address.street2 ? address.street2 + " " : " ") +
+                  address.dependentLocality +
+                  ", " +
+                  address.locale +
+                  " " +
+                  address.postalCode
+              }}
+            </p>
+          </div>
+          }
         </div>
       </div>
 
