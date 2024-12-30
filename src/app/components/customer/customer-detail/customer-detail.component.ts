@@ -31,7 +31,6 @@ export class CustomerDetailComponent implements OnInit {
       this.isLoading = false;
     });
     this.customerService.addressContext$.subscribe((value) => {
-      console.log('Address context updated', value);
       this.addressContext = value;
     });
   }

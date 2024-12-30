@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Country } from '@/src/app/models/Address/Country';
 import { Router } from '@angular/router';
 import { Customer } from '@/src/app/models/Customer/Customer';
+import { Address } from '@/src/app/models/Address/Address';
 
 @Component({
   selector: 'app-add-address',
@@ -20,6 +21,7 @@ export class AddAddressComponent implements OnInit {
   _customerService = inject(CustomerService);
   _fb = inject(FormBuilder);
   customerContext: Customer | null = null;
+  addressContext: Address[] | null = null;
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -29,6 +31,9 @@ export class AddAddressComponent implements OnInit {
     });
     this.customerService.customerContext$.subscribe(
       (val) => (this.customerContext = val)
+    );
+    this.customerService.addressContext$.subscribe(
+      (val) => (this.addressContext = val)
     );
 
     this.addressForm = this._fb.group({
@@ -54,7 +59,17 @@ export class AddAddressComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.customerContext?.id);
-    console.log(this.addressForm?.value);
+    this.isLoading = true;
+    if (this.customerContext != null && this.addressForm?.valid) {
+      this.customerService
+        .createCustomerAddress(this.customerContext.id, this.addressForm.value)
+        .subscribe((res) => {
+          this.customerService.setaddressContext([
+            ...(this.addressContext || []),
+            res,
+          ]);
+          this.isLoading = false;
+        });
+    }
   }
 }

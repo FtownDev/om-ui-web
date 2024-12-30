@@ -88,6 +88,17 @@ export class CustomerService {
       );
   }
 
+  createCustomerAddress(customerId: string, data: Address) {
+    let requestUrl = `${this.API_URL}/customers/${customerId}/address`;
+    let requestBody = JSON.stringify(data);
+    return this.httpClient
+      .post<Address>(requestUrl, requestBody, this.httpOptions)
+      .pipe(
+        map((response) => response),
+        catchError(this.handleError)
+      );
+  }
+
   getAddresses(customerId: string): Observable<Address[]> {
     let requestUrl = `${this.API_URL}/customers/${customerId}/address`;
     return this.httpClient.get<AddressRetreiveResponse>(requestUrl).pipe(

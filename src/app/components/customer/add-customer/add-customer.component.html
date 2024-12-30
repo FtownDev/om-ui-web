@@ -189,36 +189,9 @@
 
           <div class="col-span-4">
             <label
-              for="locale"
-              class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
-              >City *</label
-            >
-            <input
-              type="text"
-              id="locale"
-              formControlName="locale"
-              class="form-input"
-              [ngClass]="{
-                'border-light-error':
-                  customerForm.get('billingAddress.locale')!.invalid &&
-                  customerForm.get('billingAddress.locale')!.touched
-              }"
-            />
-            <p
-              *ngIf="
-                customerForm.get('billingAddress.locale')!.invalid &&
-                customerForm.get('billingAddress.locale')!.touched
-              "
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
-              City is required
-            </p>
-          </div>
-          <div class="col-span-4">
-            <label
               for="dependentLocality"
               class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
-              >State/Province *</label
+              >City*</label
             >
             <input
               type="text"
@@ -239,9 +212,37 @@
               "
               class="text-light-error dark:text-dark-error text-xs mt-1"
             >
-              State/Province is required
+              City is required
             </p>
           </div>
+          <div class="col-span-4">
+            <label
+              for="locale"
+              class="block text-sm font-medium text-light-heading dark:text-dark-heading pl-3"
+              >State/ Province *</label
+            >
+            <input
+              type="text"
+              id="locale"
+              formControlName="locale"
+              class="form-input"
+              [ngClass]="{
+                'border-light-error':
+                  customerForm.get('billingAddress.locale')!.invalid &&
+                  customerForm.get('billingAddress.locale')!.touched
+              }"
+            />
+            <p
+              *ngIf="
+                customerForm.get('billingAddress.locale')!.invalid &&
+                customerForm.get('billingAddress.locale')!.touched
+              "
+              class="text-light-error dark:text-dark-error text-xs mt-1"
+            >
+              State/ Province is required
+            </p>
+          </div>
+
           <div class="col-span-4">
             <label
               for="postalCode"
