@@ -172,15 +172,26 @@
         </div>
       </div>
 
-      <div class="flex px-6">
+      <div class="flex px-6 py-3 gap-3 justify-end">
         <button
-          class="p-4 rounded-xl"
+          class="px-2 py-1 rounded-full bg-transparent max-w-fit text-center border border-light-content dark:border-dark-content"
+          (click)="showAddressForm = false"
+          [class]="showAddressForm ? 'block' : 'hidden'"
+        >
+          Cancel
+        </button>
+        <button
+          class="flex p-2 pl-3 rounded-full bg-light-content text-light-fill dark:bg-dark-content dark:text-dark-fill max-w-fit text-center"
           (click)="showAddressForm = true"
-        ></button>
+        >
+          New
+          <ng-icon class="text-2xl ml-2" name="bootstrapPlusCircle" />
+        </button>
       </div>
-
       @if(showAddressForm) {
-      <app-add-address />
+      <div class="flex px-6 py-3 gap-y-3 w-full">
+        <app-add-address class="w-full" />
+      </div>
       } }
     </div>
   </div>
