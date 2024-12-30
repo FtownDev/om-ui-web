@@ -13,6 +13,7 @@ export class CustomerDetailComponent implements OnInit {
   // Flags
   isLoading = false;
   error = false;
+  showAddressForm = false;
   // Context
   customerContext: Customer | null = null;
   addressContext: Address[] | null = null;

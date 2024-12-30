@@ -172,7 +172,16 @@
         </div>
       </div>
 
-      }
+      <div class="flex px-6">
+        <button
+          class="p-4 rounded-xl"
+          (click)="showAddressForm = true"
+        ></button>
+      </div>
+
+      @if(showAddressForm) {
+      <app-add-address />
+      } }
     </div>
   </div>
 </div>

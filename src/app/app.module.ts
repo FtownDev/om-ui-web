@@ -52,6 +52,7 @@ import { SelectCustomerComponent } from './components/order/select-customer/sele
 import { OrderStatusDisplayComponent } from './components/order/order-status-display/order-status-display.component';
 import { UpdateOrderComponent } from './components/order/update-order/update-order.component';
 import { OrderHistoryComponent } from './components/order/order-history/order-history.component';
+import { AddAddressComponent } from './components/customer/add-address/add-address.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { OrderHistoryComponent } from './components/order/order-history/order-hi
     OrderStatusDisplayComponent,
     UpdateOrderComponent,
     OrderHistoryComponent,
+    AddAddressComponent,
   ],
   imports: [
     BrowserModule,
