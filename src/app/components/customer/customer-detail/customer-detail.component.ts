@@ -21,6 +21,10 @@ export class CustomerDetailComponent implements OnInit {
   // Services
   customerService = inject(CustomerService);
 
+  // Modals
+  showDeleteModal = false;
+  addressToDelete: string | null = null;
+
   ngOnInit(): void {
     this.isLoading = true;
     this.customerService.customerContext$.subscribe((value) => {
@@ -49,5 +53,33 @@ export class CustomerDetailComponent implements OnInit {
       }
     }
     return '';
+  }
+
+  openDeleteModal(addressId: string) {
+    this.addressToDelete = addressId;
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.addressToDelete = null;
+  }
+
+  confirmDelete() {
+    if (this.addressToDelete) {
+      this.customerService
+        .deleteCustomerAddress(this.customerContext!.id, this.addressToDelete)
+        .subscribe((value) => {
+          if (value != null) {
+            this.customerService.setaddressContext(
+              this.addressContext?.filter(
+                (a) => a.id !== this.addressToDelete
+              ) || []
+            );
+
+            this.closeDeleteModal();
+          }
+        });
+    }
   }
 }

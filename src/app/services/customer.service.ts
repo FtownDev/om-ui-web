@@ -107,6 +107,17 @@ export class CustomerService {
     );
   }
 
+  deleteCustomerAddress(
+    customerId: string,
+    addressId: string
+  ): Observable<string> {
+    let requestUrl = `${this.API_URL}/customers/${customerId}/address/${addressId}`;
+    return this.httpClient.delete<string>(requestUrl).pipe(
+      map((response) => response),
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Unknown error';
     if (error.error instanceof ErrorEvent) {
