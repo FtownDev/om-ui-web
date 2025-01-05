@@ -11,6 +11,7 @@ import { OrderDetailComponent } from './components/order/order-detail/order-deta
 import { AddOrderComponent } from './components/order/add-order/add-order.component';
 import { UpdateOrderComponent } from './components/order/update-order/update-order.component';
 import { OrderHistoryComponent } from './components/order/order-history/order-history.component';
+import { isAuthenticated } from './utils/auth/app.authGuard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,7 +19,8 @@ const routes: Routes = [
   {
     path: 'customers',
     component: CustomerPageComponent,
-    //canActivate: [AuthGuard],
+    canActivate: [isAuthenticated],
+    data: { role: 'customer' },
   },
   {
     path: 'customers/detail',

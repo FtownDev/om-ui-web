@@ -9,6 +9,9 @@ import {
 /* Forms */
 import { ReactiveFormsModule } from '@angular/forms'; // Add this import
 
+/* Auth */
+import { provideKeycloak } from 'keycloak-angular';
+
 /* Components */
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -22,6 +25,11 @@ import { AddInventoryComponent } from './components/inventory/add-inventory/add-
 import { ViewOrdersComponent } from './components/order/view-orders/view-orders.component';
 import { AddOrderComponent } from './components/order/add-order/add-order.component';
 import { OrderDetailComponent } from './components/order/order-detail/order-detail.component';
+import { SelectCustomerComponent } from './components/order/select-customer/select-customer.component';
+import { OrderStatusDisplayComponent } from './components/order/order-status-display/order-status-display.component';
+import { UpdateOrderComponent } from './components/order/update-order/update-order.component';
+import { OrderHistoryComponent } from './components/order/order-history/order-history.component';
+import { AddAddressComponent } from './components/customer/add-address/add-address.component';
 
 /* Icons */
 import { NgIconsModule } from '@ng-icons/core';
@@ -47,12 +55,6 @@ import {
   bootstrapGeoAlt,
   bootstrapCalendar2Check,
 } from '@ng-icons/bootstrap-icons';
-import { matfAngularDirectiveCloneColored } from '@ng-icons/material-file-icons/colored';
-import { SelectCustomerComponent } from './components/order/select-customer/select-customer.component';
-import { OrderStatusDisplayComponent } from './components/order/order-status-display/order-status-display.component';
-import { UpdateOrderComponent } from './components/order/update-order/update-order.component';
-import { OrderHistoryComponent } from './components/order/order-history/order-history.component';
-import { AddAddressComponent } from './components/customer/add-address/add-address.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,6 @@ import { AddAddressComponent } from './components/customer/add-address/add-addre
       bootstrapTwitterX,
       bootstrapFacebook,
       bootstrapInstagram,
-      matfAngularDirectiveCloneColored,
       bootstrapPlusSquareFill,
       bootstrapXLg,
       bootstrapPerson,
@@ -103,7 +104,21 @@ import { AddAddressComponent } from './components/customer/add-address/add-addre
       bootstrapCalendar2Check,
     }),
   ],
-  providers: [provideHttpClient(withInterceptorsFromDi())],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi()),
+    provideKeycloak({
+      config: {
+        url: 'https://login.ftown.dev/',
+        realm: 'order-management',
+        clientId: 'web-client',
+      },
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri:
+          window.location.origin + '/silent-check-sso.html',
+      },
+    }),
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
