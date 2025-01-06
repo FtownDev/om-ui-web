@@ -25,15 +25,17 @@ loaded} @else { @if(this.addressForm != null) {
             addressForm.get('street1')!.touched
         }"
       />
-      <p
-        *ngIf="
+      @if (
           addressForm.get('street1')!.invalid &&
           addressForm.get('street1')!.touched
-        "
+        ) {
+<p
+       
         class="text-light-error dark:text-dark-error text-xs mt-1"
       >
         Street Address is required
       </p>
+}
     </div>
 
     <div class="col-span-6">
@@ -67,15 +69,17 @@ loaded} @else { @if(this.addressForm != null) {
             addressForm.get('dependentLocality')!.touched
         }"
       />
-      <p
-        *ngIf="
+      @if (
           addressForm.get('dependentLocality')!.invalid &&
           addressForm.get('dependentLocality')!.touched
-        "
+        ) {
+<p
+       
         class="text-light-error dark:text-dark-error text-xs mt-1"
       >
         City is required
       </p>
+}
     </div>
     <div class="col-span-4">
       <label
@@ -94,15 +98,17 @@ loaded} @else { @if(this.addressForm != null) {
             addressForm.get('locale')!.touched
         }"
       />
-      <p
-        *ngIf="
+      @if (
           addressForm.get('locale')!.invalid &&
           addressForm.get('locale')!.touched
-        "
+        ) {
+<p
+       
         class="text-light-error dark:text-dark-error text-xs mt-1"
       >
         State/ Province is required
       </p>
+}
     </div>
 
     <div class="col-span-4">
@@ -122,15 +128,17 @@ loaded} @else { @if(this.addressForm != null) {
             addressForm.get('postalCode')!.touched
         }"
       />
-      <p
-        *ngIf="
+      @if (
           addressForm.get('postalCode')!.invalid &&
           addressForm.get('postalCode')!.touched
-        "
+        ) {
+<p
+       
         class="text-light-error dark:text-dark-error text-xs mt-1"
       >
         Valid Postal Code is required
       </p>
+}
     </div>
     <div class="col-span-5">
       <label
@@ -153,15 +161,17 @@ loaded} @else { @if(this.addressForm != null) {
         <option [value]="country.id">{{ country.name }}</option>
         }
       </select>
-      <p
-        *ngIf="
+      @if (
           addressForm.get('country')!.invalid &&
           addressForm.get('country')!.touched
-        "
+        ) {
+<p
+       
         class="text-light-error dark:text-dark-error text-xs mt-1"
       >
         Country is required
       </p>
+}
     </div>
 
     <div class="flex col-span-12 justify-end">

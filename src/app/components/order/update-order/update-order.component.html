@@ -450,11 +450,13 @@
               />
 
               <!-- Error messages -->
-              <div *ngIf="i['qty'].invalid && i['qty']; touched">
-                <small *ngIf="i['qty'].errors?.['required']" class="error">
-                  required
-                </small>
+              @if (i['qty'].invalid && i['qty'].touched) {
+              <div>
+                @if (i['qty'].errors?.['required']) {
+                <small class="error"> required </small>
+                }
               </div>
+              }
 
               <button
                 class="flex p-2 pb-1 rounded-md bg-dark-input text-light-accent text-center text-md"

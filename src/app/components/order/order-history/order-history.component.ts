@@ -14,13 +14,15 @@ import { OrderHistory } from '@/src/app/models/Order/OrderHistory';
 import { FieldNameDisplay } from '@/src/app/utils/FieldNameDisplay';
 import { OrderItemHistory } from '@/src/app/models/Order/OrderItemHistory';
 import { OrderItemChangeType } from '@/src/app/models/Order/OrderItemChangeType';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-order-history',
-  standalone: false,
-
-  templateUrl: './order-history.component.html',
-  styleUrl: './order-history.component.css',
+    selector: 'app-order-history',
+    templateUrl: './order-history.component.html',
+    styleUrl: './order-history.component.css',
+    imports: [
+    DatePipe
+],
 })
 export class OrderHistoryComponent implements OnInit {
   // Flags

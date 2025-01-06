@@ -1,16 +1,20 @@
 import { CustomerService } from '@/src/app/services/customer.service';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Country } from '@/src/app/models/Address/Country';
 import { Router } from '@angular/router';
 import { Customer } from '@/src/app/models/Customer/Customer';
 import { Address } from '@/src/app/models/Address/Address';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-add-address',
-  standalone: false,
-  templateUrl: './add-address.component.html',
-  styleUrl: './add-address.component.css',
+    selector: 'app-add-address',
+    templateUrl: './add-address.component.html',
+    styleUrl: './add-address.component.css',
+    imports: [
+    ReactiveFormsModule,
+    NgClass
+],
 })
 export class AddAddressComponent implements OnInit {
   countryList: Country[] = [];

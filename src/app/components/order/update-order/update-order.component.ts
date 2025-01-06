@@ -8,20 +8,27 @@ import { CustomerService } from '@/src/app/services/customer.service';
 import { InventoryService } from '@/src/app/services/inventory.service';
 import { OrderService } from '@/src/app/services/order.service';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EventType } from '@/src/app/models/Order/EventType';
 import { PaymentTerms } from '@/src/app/models/Order/PaymentTerms';
 import { ShippingRates } from '@/src/app/models/Order/ShippingRates';
 import { OrderItemHistoryCreateRequest } from '@/src/app/models/Order/OrderItemHistoryCreateRequest';
 import { OrderItemChangeType } from '@/src/app/models/Order/OrderItemChangeType';
+import { NgClass, CurrencyPipe, DatePipe } from '@angular/common';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
-  selector: 'app-update-order',
-  standalone: false,
-
-  templateUrl: './update-order.component.html',
-  styleUrl: './update-order.component.css',
+    selector: 'app-update-order',
+    templateUrl: './update-order.component.html',
+    styleUrl: './update-order.component.css',
+    imports: [
+    ReactiveFormsModule,
+    NgClass,
+    NgIcon,
+    CurrencyPipe,
+    DatePipe
+],
 })
 export class UpdateOrderComponent implements OnInit {
   // Flags

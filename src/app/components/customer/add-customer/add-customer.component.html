@@ -29,12 +29,11 @@
               'border-red-500': f['firstName'].invalid && f['firstName'].touched
             }"
           />
-          <p
-            *ngIf="f['firstName'].invalid && f['firstName'].touched"
-            class="text-light-error dark:text-dark-error text-xs mt-1"
-          >
+          @if (f['firstName'].invalid && f['firstName'].touched) {
+          <p class="text-light-error dark:text-dark-error text-xs mt-1">
             First Name is required
           </p>
+          }
         </div>
 
         <div class="col-span-6">
@@ -52,12 +51,11 @@
               'border-red-500': f['lastName'].invalid && f['lastName'].touched
             }"
           />
-          <p
-            *ngIf="f['lastName'].invalid && f['lastName'].touched"
-            class="text-light-error dark:text-dark-error text-xs mt-1"
-          >
+          @if (f['lastName'].invalid && f['lastName'].touched) {
+          <p class="text-light-error dark:text-dark-error text-xs mt-1">
             Last Name is required
           </p>
+          }
         </div>
 
         <div class="flex col-span-12 gap-4 mb-4">
@@ -76,12 +74,11 @@
                 'border-red-500': f['email'].invalid && f['email'].touched
               }"
             />
-            <p
-              *ngIf="f['email'].invalid && f['email'].touched"
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
+            @if (f['email'].invalid && f['email'].touched) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
               Valid Email is required
             </p>
+            }
           </div>
 
           <div class="col-span-4">
@@ -100,12 +97,11 @@
                   f['primaryPhone'].invalid && f['primaryPhone'].touched
               }"
             />
-            <p
-              *ngIf="f['primaryPhone'].invalid && f['primaryPhone'].touched"
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
+            @if (f['primaryPhone'].invalid && f['primaryPhone'].touched) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
               Valid 10-digit phone number is required
             </p>
+            }
           </div>
 
           <div class="col-span-2">
@@ -162,15 +158,12 @@
                   customerForm.get('billingAddress.street1')!.touched
               }"
             />
-            <p
-              *ngIf="
-                customerForm.get('billingAddress.street1')!.invalid &&
-                customerForm.get('billingAddress.street1')!.touched
-              "
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
+            @if ( customerForm.get('billingAddress.street1')!.invalid &&
+            customerForm.get('billingAddress.street1')!.touched ) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
               Street Address is required
             </p>
+            }
           </div>
 
           <div class="col-span-6">
@@ -205,15 +198,12 @@
                   customerForm.get('billingAddress.dependentLocality')!.touched
               }"
             />
-            <p
-              *ngIf="
-                customerForm.get('billingAddress.dependentLocality')!.invalid &&
-                customerForm.get('billingAddress.dependentLocality')!.touched
-              "
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
+            @if ( customerForm.get('billingAddress.dependentLocality')!.invalid
+            && customerForm.get('billingAddress.dependentLocality')!.touched ) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
               City is required
             </p>
+            }
           </div>
           <div class="col-span-4">
             <label
@@ -232,15 +222,12 @@
                   customerForm.get('billingAddress.locale')!.touched
               }"
             />
-            <p
-              *ngIf="
-                customerForm.get('billingAddress.locale')!.invalid &&
-                customerForm.get('billingAddress.locale')!.touched
-              "
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
+            @if ( customerForm.get('billingAddress.locale')!.invalid &&
+            customerForm.get('billingAddress.locale')!.touched ) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
               State/ Province is required
             </p>
+            }
           </div>
 
           <div class="col-span-4">
@@ -260,15 +247,12 @@
                   customerForm.get('billingAddress.postalCode')!.touched
               }"
             />
-            <p
-              *ngIf="
-                customerForm.get('billingAddress.postalCode')!.invalid &&
-                customerForm.get('billingAddress.postalCode')!.touched
-              "
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
+            @if ( customerForm.get('billingAddress.postalCode')!.invalid &&
+            customerForm.get('billingAddress.postalCode')!.touched ) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
               Valid Postal Code is required
             </p>
+            }
           </div>
           <div class="col-span-5">
             <label
@@ -291,15 +275,12 @@
               <option [value]="country.id">{{ country.name }}</option>
               }
             </select>
-            <p
-              *ngIf="
-                customerForm.get('billingAddress.country')!.invalid &&
-                customerForm.get('billingAddress.country')!.touched
-              "
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
+            @if ( customerForm.get('billingAddress.country')!.invalid &&
+            customerForm.get('billingAddress.country')!.touched ) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
               Country is required
             </p>
+            }
           </div>
 
           <div class="flex col-span-12 justify-end">

@@ -3,15 +3,20 @@ import { InventoryCategoryCreateRequest } from '@/src/app/models/Inventory/Inven
 import { InventoryItemCreateRequest } from '@/src/app/models/Inventory/InventoryItemCreateRequest';
 import { InventoryService } from '@/src/app/services/inventory.service';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgIcon } from '@ng-icons/core';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-add-inventory',
-  standalone: false,
-
-  templateUrl: './add-inventory.component.html',
-  styleUrl: './add-inventory.component.css',
+    selector: 'app-add-inventory',
+    templateUrl: './add-inventory.component.html',
+    styleUrl: './add-inventory.component.css',
+    imports: [
+    NgIcon,
+    ReactiveFormsModule,
+    NgClass
+],
 })
 export class AddInventoryComponent implements OnInit {
   addCategory: Boolean = false;

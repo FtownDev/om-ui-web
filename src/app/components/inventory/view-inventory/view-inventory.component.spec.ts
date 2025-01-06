@@ -8,8 +8,8 @@ describe('ViewInventoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ViewInventoryComponent]
-    })
+    imports: [ViewInventoryComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ViewInventoryComponent);

@@ -7,13 +7,19 @@ import { Router } from '@angular/router';
 import { OrderStatus } from '@/src/app/models/Order/OrderStatus';
 import { EventType } from '@/src/app/models/Order/EventType';
 import { OrderStatusDisplayComponent } from '../order-status-display/order-status-display.component';
+import { NgIcon } from '@ng-icons/core';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-view-orders',
-  standalone: false,
-
-  templateUrl: './view-orders.component.html',
-  styleUrl: './view-orders.component.css',
+    selector: 'app-view-orders',
+    templateUrl: './view-orders.component.html',
+    styleUrl: './view-orders.component.css',
+    imports: [
+        NgIcon,
+        OrderStatusDisplayComponent,
+        CurrencyPipe,
+        DatePipe,
+    ],
 })
 export class ViewOrdersComponent implements OnInit {
   orderService = inject(OrderService);

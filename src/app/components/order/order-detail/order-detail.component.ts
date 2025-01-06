@@ -12,13 +12,20 @@ import { Component, inject, OnInit } from '@angular/core';
 import { PaymentTerms } from '@/src/app/models/Order/PaymentTerms';
 import { ShippingRates } from '@/src/app/models/Order/ShippingRates';
 import { Router } from '@angular/router';
+import { NgIcon } from '@ng-icons/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-order-detail',
-  standalone: false,
-
-  templateUrl: './order-detail.component.html',
-  styleUrl: './order-detail.component.css',
+    selector: 'app-order-detail',
+    templateUrl: './order-detail.component.html',
+    styleUrl: './order-detail.component.css',
+    imports: [
+        NgIcon,
+        ReactiveFormsModule,
+        CurrencyPipe,
+        DatePipe,
+    ],
 })
 export class OrderDetailComponent implements OnInit {
   orderContext: Order | null = null;
