@@ -116,6 +116,7 @@ import {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri:
           window.location.origin + '/silent-check-sso.html',
+        redirectUri: window.location.origin,
       },
     }),
   ],
