@@ -3,13 +3,14 @@ import { InventoryItem } from '@/src/app/models/Inventory/InventoryItem';
 import { InventoryService } from '@/src/app/services/inventory.service';
 import { Component, inject, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgIcon } from '@ng-icons/core';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-view-inventory',
-  standalone: false,
-
-  templateUrl: './view-inventory.component.html',
-  styleUrl: './view-inventory.component.css',
+    selector: 'app-view-inventory',
+    templateUrl: './view-inventory.component.html',
+    styleUrl: './view-inventory.component.css',
+    imports: [NgIcon, CurrencyPipe],
 })
 export class ViewInventoryComponent implements OnInit {
   inventoryService = inject(InventoryService);

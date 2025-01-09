@@ -8,8 +8,8 @@ describe('OrderHistoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OrderHistoryComponent]
-    })
+    imports: [OrderHistoryComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(OrderHistoryComponent);

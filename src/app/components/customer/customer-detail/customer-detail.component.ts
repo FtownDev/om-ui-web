@@ -2,12 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CustomerService } from '@/src/app/services/customer.service';
 import { Customer } from '@/src/app/models/Customer/Customer';
 import { Address } from '@/src/app/models/Address/Address';
+import { NgIcon } from '@ng-icons/core';
+import { AddAddressComponent } from '../add-address/add-address.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-customer-detail',
-  standalone: false,
   templateUrl: './customer-detail.component.html',
   styleUrl: './customer-detail.component.css',
+  imports: [NgIcon, AddAddressComponent, DatePipe],
 })
 export class CustomerDetailComponent implements OnInit {
   // Flags

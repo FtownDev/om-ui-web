@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
-  selector: 'app-footer',
-  standalone: false,
-  
-  templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+    selector: 'app-footer',
+    templateUrl: './footer.component.html',
+    styleUrl: './footer.component.css',
+    imports: [NgIcon]
 })
 export class FooterComponent {
 

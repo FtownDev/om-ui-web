@@ -40,12 +40,11 @@
                 'border-red-500': c['name'].invalid && c['name'].touched
               }"
             />
-            <p
-              *ngIf="c['name'].invalid && c['name'].touched"
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
+            @if (c['name'].invalid && c['name'].touched) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
               Item Name is required
             </p>
+            }
           </div>
           <div class="col-span-6">
             <label
@@ -91,11 +90,13 @@
             />
 
             <!-- Error messages -->
-            <div *ngIf="c['price'].invalid && c['price']; touched">
-              <small *ngIf="c['price'].errors?.['required']" class="error">
-                Price is required
-              </small>
+            @if (c['price'].invalid && c['price'].touched) {
+            <div>
+              @if (c['price'].errors?.['required']) {
+              <small class="error"> Price is required </small>
+              }
             </div>
+            }
           </div>
 
           <div class="flex col-span-6 justify-end py-6">
@@ -137,12 +138,11 @@
                 'border-red-500': f['name'].invalid && f['name'].touched
               }"
             />
-            <p
-              *ngIf="f['name'].invalid && f['name'].touched"
-              class="text-light-error dark:text-dark-error text-xs mt-1"
-            >
+            @if (f['name'].invalid && f['name'].touched) {
+            <p class="text-light-error dark:text-dark-error text-xs mt-1">
               Category Name is required
             </p>
+            }
           </div>
           <div class="col-span-6">
             <label

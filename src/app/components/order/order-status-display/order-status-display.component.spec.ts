@@ -8,8 +8,8 @@ describe('OrderStatusDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OrderStatusDisplayComponent]
-    })
+    imports: [OrderStatusDisplayComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(OrderStatusDisplayComponent);

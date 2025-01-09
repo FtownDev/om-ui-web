@@ -6,7 +6,7 @@ import { CustomerService } from '@/src/app/services/customer.service';
 import { OrderService } from '@/src/app/services/order.service';
 import { Component, inject, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { OrderItem } from '@/src/app/models/Order/OrderItem';
 import { InventoryService } from '@/src/app/services/inventory.service';
 import { InventoryCategory } from '@/src/app/models/Inventory/InventoryCategory';
@@ -15,13 +15,23 @@ import { PaymentTerms } from '@/src/app/models/Order/PaymentTerms';
 import { TaxRates } from '@/src/app/models/Order/TaxRates';
 import { ShippingRates } from '@/src/app/models/Order/ShippingRates';
 import { OrderCreateRequest } from '@/src/app/models/Order/OrderCreateRequest';
+import { SelectCustomerComponent } from '../select-customer/select-customer.component';
+import { NgClass, DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
-  selector: 'app-add-order',
-  standalone: false,
-
-  templateUrl: './add-order.component.html',
-  styleUrl: './add-order.component.css',
+    selector: 'app-add-order',
+    templateUrl: './add-order.component.html',
+    styleUrl: './add-order.component.css',
+    imports: [
+    SelectCustomerComponent,
+    ReactiveFormsModule,
+    NgClass,
+    NgIcon,
+    DecimalPipe,
+    CurrencyPipe,
+    DatePipe
+],
 })
 export class AddOrderComponent implements OnInit {
   isLoading: Boolean = false;

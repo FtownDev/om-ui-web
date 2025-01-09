@@ -8,8 +8,8 @@ describe('ViewOrdersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ViewOrdersComponent]
-    })
+    imports: [ViewOrdersComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ViewOrdersComponent);

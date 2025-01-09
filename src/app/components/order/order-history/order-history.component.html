@@ -1,8 +1,8 @@
 <div class="justify-center min-h-screen">
   <div class="container min-h-full max-w-[625px] lg:max-w-6xl p-1 md:p-2">
     <div class="flex border-b border-gray-200">
+      @for (tab of tabs; track tab; let i = $index) {
       <button
-        *ngFor="let tab of tabs; let i = index"
         (click)="selectTab(i)"
         [class]="
           'px-6 py-3 text-sm font-medium rounded-t-lg transition-all duration-200 border-2 border-b-0' +
@@ -13,8 +13,8 @@
       >
         <div class="flex items-center space-x-2">
           <span [class.font-bold]="activeTab === i">{{ tab.label }}</span>
+          @if (tab.badge) {
           <div
-            *ngIf="tab.badge"
             [class]="
               'px-2 py-0.5 text-xs rounded-full ' +
               (activeTab === i
@@ -24,8 +24,10 @@
           >
             {{ tab.badge }}
           </div>
+          }
         </div>
       </button>
+      }
     </div>
 
     <div class="mt-8 bg-light-fill dark:bg-dark-section rounded-sm shadow-lg">

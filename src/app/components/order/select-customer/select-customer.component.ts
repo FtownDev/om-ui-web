@@ -1,13 +1,15 @@
 import { Customer } from '@/src/app/models/Customer/Customer';
 import { CustomerService } from '@/src/app/services/customer.service';
 import { Component, inject, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-select-customer',
-  standalone: false,
-
-  templateUrl: './select-customer.component.html',
-  styleUrl: './select-customer.component.css',
+    selector: 'app-select-customer',
+    templateUrl: './select-customer.component.html',
+    styleUrl: './select-customer.component.css',
+    imports: [
+    DatePipe
+],
 })
 export class SelectCustomerComponent implements OnInit {
   customers: Customer[] = [];
