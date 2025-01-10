@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { environment } from '@/src/environments/environment.development';
+import { environment } from '@/src/environments/environment';
 import { InventoryCategory } from '../models/Inventory/InventoryCategory';
 import { InventoryItem } from '../models/Inventory/InventoryItem';
 import { InventoryItemCreateRequest } from '../models/Inventory/InventoryItemCreateRequest';

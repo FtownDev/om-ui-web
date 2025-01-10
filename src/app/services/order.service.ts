@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
-import { environment } from '@/src/environments/environment.development';
+import { environment } from '@/src/environments/environment';
 import { OrderRetrieveResponse } from '../models/Order/OrderRetrieveResponse';
 import { EventType } from '../models/Order/EventType';
 import { Order } from '../models/Order/Order';

@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { environment } from '@/src/environments/environment.development';
+import { environment } from '@/src/environments/environment';
 import { CustomerRetrieveResponse } from '../models/Customer/CustomerRetrieveResponse';
 import { CustomerCreateRequest } from '../models/Customer/CustomerCreateRequest';
 import { Country } from '../models/Address/Country';
