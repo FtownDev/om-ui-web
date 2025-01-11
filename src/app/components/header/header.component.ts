@@ -1,21 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ThemeService } from '../../services/theme.service';
 import { NgIcon } from '@ng-icons/core';
 import { NgClass } from '@angular/common';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrl: './header.component.css',
-    imports: [
-    NgIcon,
-    NgClass
-],
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrl: './header.component.css',
+  imports: [NgIcon, NgClass],
 })
 export class HeaderComponent {
   isMobileMenuOpen = false;
-
-  constructor(private themeService: ThemeService) {}
+  themeService = inject(ThemeService);
 
   toggleTheme() {
     this.themeService.toggleTheme();
