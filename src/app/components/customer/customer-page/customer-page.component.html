@@ -12,15 +12,21 @@
     </div>
 
     <!-- Search and Filter -->
-    <div class="my-4 flex sm:flex-row flex-col">
+    <form
+      [formGroup]="searchForm!"
+      (ngSubmit)="searchCustomers()"
+      class="my-4 flex sm:flex-row flex-col"
+    >
       <div class="flex flex-row mb-1 sm:mb-0">
         <div class="relative">
           <select
+            (change)="onFieldChange($event.target)"
             class="appearance-none h-full rounded border block w-full bg-white border-gray-300 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           >
-            <option>All</option>
-            <option>Active</option>
-            <option>Inactive</option>
+            <option value="firstName">First Name</option>
+            <option value="lastName">Last Name</option>
+            <option value="email">Email</option>
+            <option value="Phone">Phone</option>
           </select>
           <div
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
@@ -38,19 +44,39 @@
         </div>
         <div class="relative ml-4">
           <input
+            formControlName="value"
             type="text"
             placeholder="Search customers..."
             class="appearance-none rounded-full border border-gray-300 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
           />
         </div>
+        <div class="relative flex ml-4 justify-center">
+          <button
+            type="submit"
+            class="bg-light-heading dark:bg-dark-heading px-3 py-1 rounded-md text-light-accent dark:text-dark-accent"
+          >
+            Search
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
 
     <!-- Customer Table -->
     <div
       class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto dark:text-dark-heading"
     >
       <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+        @if (isLoading()) {
+        <div
+          id="loading-overlay"
+          class="h-screen flex items-center justify-center bg-light-heading bg-opacity-10 z-50 rounded-lg"
+        >
+          <!-- Spinner -->
+          <div
+            class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"
+          ></div>
+        </div>
+        } @else {
         <table class="min-w-full leading-normal">
           <thead>
             <tr
@@ -156,6 +182,7 @@
             }
           </tbody>
         </table>
+        }
 
         <!-- Pagination -->
         <!-- <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">

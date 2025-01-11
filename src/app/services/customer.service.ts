@@ -13,12 +13,15 @@ import { Country } from '../models/Address/Country';
 import { Customer } from '../models/Customer/Customer';
 import { Address } from '../models/Address/Address';
 import { AddressRetreiveResponse } from '../models/Address/AddressRetrieveResponse';
+import { CustomerSearchRequest } from '../models/Customer/CustomerSearchRequest';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CustomerService {
   private readonly API_URL = environment.API_URL;
+  private readonly defaultPageSize = 50;
+  private readonly defaultPage = 0;
 
   private customerContext = new BehaviorSubject<Customer | null>(null);
   customerContext$ = this.customerContext.asObservable();
@@ -82,6 +85,19 @@ export class CustomerService {
     let requestBody = JSON.stringify(data);
     return this.httpClient
       .post<Customer>(requestUrl, requestBody, this.httpOptions)
+      .pipe(
+        map((response) => response),
+        catchError(this.handleError)
+      );
+  }
+
+  searchCustomers(data: CustomerSearchRequest) {
+    let requestUrl = `${this.API_URL}/customers/search?pageSize=${this.defaultPageSize}&currentNumber=${this.defaultPage}`;
+    let requestBody = JSON.stringify(data);
+
+    console.log('data', data);
+    return this.httpClient
+      .post<Customer[]>(requestUrl, requestBody, this.httpOptions)
       .pipe(
         map((response) => response),
         catchError(this.handleError)
