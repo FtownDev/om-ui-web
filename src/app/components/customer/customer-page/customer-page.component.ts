@@ -73,6 +73,6 @@ export class CustomerPageComponent implements OnInit {
 
   async selectCustomer(data: Customer) {
     await this.customerService.setCustomerContext(data);
-    this.router.navigate(['/customers/detail']);
+    this.router.navigate([`/customers/${data.id}/detail`]);
   }
 }

@@ -1,10 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { CustomerService } from '@/src/app/services/customer.service';
 import { Customer } from '@/src/app/models/Customer/Customer';
 import { Address } from '@/src/app/models/Address/Address';
 import { NgIcon } from '@ng-icons/core';
 import { AddAddressComponent } from '../add-address/add-address.component';
 import { DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-customer-detail',
@@ -17,34 +18,60 @@ export class CustomerDetailComponent implements OnInit {
   isLoading = false;
   error = false;
   showAddressForm = false;
+
   // Context
+  route = inject(ActivatedRoute);
+  customerId: string | null = null;
   customerContext: Customer | null = null;
   addressContext: Address[] | null = null;
 
   // Services
   customerService = inject(CustomerService);
 
-  // Modals
+  // Modals / Actions
+  isOpen = false;
   showDeleteModal = false;
   addressToDelete: string | null = null;
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    this.isOpen = false;
+  }
+
+  toggleDropdown(event: MouseEvent) {
+    event.stopPropagation();
+    this.isOpen = !this.isOpen;
+  }
+
   ngOnInit(): void {
     this.isLoading = true;
+    this.route.paramMap.subscribe((params) => {
+      this.customerId = params.get('customerId');
+    });
     this.customerService.customerContext$.subscribe((value) => {
       this.customerContext = value;
       if (value !== null) {
+        this.isLoading = true;
         this.loadAddresses(value.id);
+      } else if (this.customerId != null) {
+        this.loadCustomerDetails();
       }
-      this.isLoading = false;
     });
+
     this.customerService.addressContext$.subscribe((value) => {
       this.addressContext = value;
     });
   }
 
+  loadCustomerDetails() {
+    this.customerService.getCustomer(this.customerId!).subscribe((value) => {
+      this.customerService.setCustomerContext(value);
+    });
+  }
   loadAddresses(customerId: string): void {
     this.customerService.getAddresses(customerId).subscribe((value) => {
       this.customerService.setaddressContext(value);
+      this.isLoading = false;
     });
   }
 
@@ -84,5 +111,17 @@ export class CustomerDetailComponent implements OnInit {
           }
         });
     }
+  }
+
+  onEdit() {
+    console.log('Edit clicked');
+    this.isOpen = false;
+    // Implement edit logic
+  }
+
+  onDelete() {
+    console.log('Delete clicked');
+    this.isOpen = false;
+    // Implement delete logic
   }
 }

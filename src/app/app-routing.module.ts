@@ -20,7 +20,7 @@ const routes: Routes = [
     component: CustomerPageComponent,
   },
   {
-    path: 'customers/detail',
+    path: 'customers/:customerId/detail',
     component: CustomerDetailComponent,
   },
   {
