@@ -17,28 +17,20 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-order-detail',
-    templateUrl: './order-detail.component.html',
-    styleUrl: './order-detail.component.css',
-    imports: [
-        NgIcon,
-        ReactiveFormsModule,
-        CurrencyPipe,
-        DatePipe,
-    ],
+  selector: 'app-order-detail',
+  templateUrl: './order-detail.component.html',
+  styleUrl: './order-detail.component.css',
+  imports: [NgIcon, ReactiveFormsModule, CurrencyPipe, DatePipe],
 })
 export class OrderDetailComponent implements OnInit {
   orderContext: Order | null = null;
   orderService = inject(OrderService);
   customerService = inject(CustomerService);
-  inventoryService = inject(InventoryService);
   router = inject(Router);
   customerContext: Customer | null = null;
   eventTypes: EventType[] | null = [];
   customerAddresses: Address[] = [];
   orderItems: OrderItem[] = [];
-  inventoryItems: InventoryItem[] = [];
-  inventoryCategories: InventoryCategory[] = [];
   shippingRate = ShippingRates;
   paymentTerms: any;
   orderSubTotal: number = 0;
@@ -61,13 +53,6 @@ export class OrderDetailComponent implements OnInit {
           this.orderService.setEventsContext(res);
         });
       }
-      await this.inventoryService
-        .getInventoryItems()
-        .subscribe((res) => (this.inventoryItems = res));
-      await this.inventoryService
-        .getInventoryCategories()
-        .subscribe((res) => (this.inventoryCategories = res));
-
       this.paymentTerms = Object.keys(PaymentTerms)
         .filter((key) => isNaN(Number(key)))
         .map((key) => ({
@@ -106,10 +91,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   getOrderTotal() {
-    this.orderItems.forEach((i) => {
-      this.orderSubTotal +=
-        this.inventoryItems.find((j) => j.id == i.itemId)!.price * i.qty;
-    });
+    return this.orderContext?.amount;
   }
 
   getEventName(eventTypeId: string) {
@@ -133,20 +115,6 @@ export class OrderDetailComponent implements OnInit {
     } else {
       return null;
     }
-  }
-
-  getItemName(itemId: string) {
-    return this.inventoryItems.find((f) => f.id == itemId)?.name;
-  }
-
-  getItemCategoryName(itemId: string) {
-    return this.inventoryCategories.find(
-      (c) => c.id == this.inventoryItems.find((f) => f.id == itemId)?.categoryId
-    )?.name;
-  }
-
-  getItemPrice(itemId: string) {
-    return this.inventoryItems.find((f) => f.id == itemId)?.price;
   }
 
   getAddressLine3(id: string) {

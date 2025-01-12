@@ -8,5 +8,8 @@ export interface OrderItemHistory {
   newQuantity: number;
   changedDate: Date;
   changedByUserId: string;
+  changedByUserName: string;
   changeType: OrderItemChangeType;
+  itemName: string;
+  itemCategory: string;
 }

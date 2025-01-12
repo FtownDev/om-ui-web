@@ -20,24 +20,7 @@ export interface Order {
   discount?: number;
   currentStatus: OrderStatus;
   paymentTerms: PaymentTerms;
+  itemTotalValue: number;
+  shippingCost: number;
+  taxValue: number;
 }
-/*
-public Guid Id 
-public DateTime Created 
-public DateTime Updated 
-public DateTime EventDate 
-public Guid EventTypeId
-public Guid BilledToCustomerId
-public Guid BilledToAddressId 
-public Guid ShippedToAddressId 
-public decimal Amount 
-public decimal BalanceDue 
-public decimal TaxRate 
-public List<List<DateTime>> DeliveryWindow 
-public List<List<DateTime>> PickupWindow 
-public string DeliveryPickupNotes 
-public decimal Deposit 
-public decimal Discount 
-public OrderStatus CurrentStatus 
-public PaymentTerms PaymentTerms 
- */

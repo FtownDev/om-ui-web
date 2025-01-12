@@ -220,19 +220,19 @@
             class="hover:bg-light-accent hover:dark:bg-dark-accent bg-light-section dark:bg-dark-border border-light-border dark:border-dark-border cursor-pointer"
           >
             <td class="pr-3 pl-16 py-2 text-sm text-left">
-              {{ getItemCategoryName(item.itemId) }} -
-              {{ getItemName(item.itemId) }}
+              {{ item.itemCategory }} -
+              {{ item.itemName }}
             </td>
 
             <td class="px-3 py-2 text-sm text-right">
               {{ item.qty }}
             </td>
             <td class="px-3 py-2 text-sm text-left">
-              {{ getItemPrice(item.itemId) | currency }}
+              {{ item.price | currency }}
             </td>
 
             <td class="px-3 py-2 text-sm text-right">
-              {{ item.qty * getItemPrice(item.itemId!)! | currency }}
+              {{ item.qty * item.price | currency }}
             </td>
           </tr>
 

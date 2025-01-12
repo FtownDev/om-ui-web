@@ -8,7 +8,12 @@ import { CustomerService } from '@/src/app/services/customer.service';
 import { InventoryService } from '@/src/app/services/inventory.service';
 import { OrderService } from '@/src/app/services/order.service';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EventType } from '@/src/app/models/Order/EventType';
 import { PaymentTerms } from '@/src/app/models/Order/PaymentTerms';
@@ -19,16 +24,10 @@ import { NgClass, CurrencyPipe, DatePipe } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 
 @Component({
-    selector: 'app-update-order',
-    templateUrl: './update-order.component.html',
-    styleUrl: './update-order.component.css',
-    imports: [
-    ReactiveFormsModule,
-    NgClass,
-    NgIcon,
-    CurrencyPipe,
-    DatePipe
-],
+  selector: 'app-update-order',
+  templateUrl: './update-order.component.html',
+  styleUrl: './update-order.component.css',
+  imports: [ReactiveFormsModule, NgClass, NgIcon, CurrencyPipe, DatePipe],
 })
 export class UpdateOrderComponent implements OnInit {
   // Flags
@@ -129,8 +128,11 @@ export class UpdateOrderComponent implements OnInit {
 
     this.orderItemForm = this.fb.group({
       categoryId: ['', Validators.required],
+      categoryName: ['', Validators.required],
       itemId: ['', Validators.required],
+      itemName: ['', Validators.required],
       qty: [''],
+      price: [0, Validators.required],
     });
 
     this.orderForm = this.fb.group({
@@ -216,7 +218,6 @@ export class UpdateOrderComponent implements OnInit {
     this.isLoading = true;
 
     if (this.orderId != null) {
-      console.log('getting order data');
       this.orderService.getOrderById(this.orderId).subscribe((o) => {
         this.orderService.setOrderContext(o);
       });
@@ -263,24 +264,35 @@ export class UpdateOrderComponent implements OnInit {
       const existingItem = this.orderItems.find(
         (i) => i.itemId == formVal.itemId
       );
+
       if (existingItem) {
         existingItem.qty += formVal.qty;
         itemChange = {
           itemId: existingItem.itemId,
           qty: existingItem.qty,
           changeType: OrderItemChangeType.Updated,
+          itemName: existingItem.itemName,
+          itemCategory: existingItem.itemCategory,
+          price: existingItem.price,
         };
       } else {
+        const cat = this.itemCategories.find((c) => c.id == formVal.categoryId);
         const newItem: OrderItem = {
           itemId: formVal.itemId,
           qty: formVal.qty,
           orderId: this.orderContext!.id!,
+          itemName: formVal.itemName,
+          itemCategory: cat!.name,
+          price: formVal.price,
         };
 
         itemChange = {
           itemId: newItem.itemId,
           qty: newItem.qty,
           changeType: OrderItemChangeType.Added,
+          itemName: newItem.itemName,
+          itemCategory: cat!.name,
+          price: newItem.price,
         };
 
         this.orderItems.push(newItem);
@@ -291,10 +303,15 @@ export class UpdateOrderComponent implements OnInit {
   }
 
   removeOrderItem(itemId: string) {
+    const item = this.items.find((i) => i.id == itemId);
+    const cat = this.inventoryCategories.find((c) => c.id == item?.categoryId);
     const itemChange: OrderItemHistoryCreateRequest = {
       itemId: itemId,
       qty: 0,
       changeType: OrderItemChangeType.Deleted,
+      itemCategory: cat!.id,
+      itemName: item!.name,
+      price: item!.price,
     };
     this.itemsChangeList.push(itemChange);
     this.orderItems = this.orderItems.filter((i) => i.itemId != itemId);
@@ -304,6 +321,7 @@ export class UpdateOrderComponent implements OnInit {
     const category = this.itemCategories?.find((c) => c.id == event.value);
     if (category) {
       this.orderItemForm!.get('categoryId')!.setValue(category.id);
+      this.orderItemForm!.get('categoryName')!.setValue(category.name);
       this.filteredItems = this.items.filter(
         (i) => i.categoryId == category.id
       );
@@ -314,14 +332,16 @@ export class UpdateOrderComponent implements OnInit {
     const item = this.filteredItems.find((i) => i.id == event.value);
     if (item) {
       this.orderItemForm!.get('itemId')!.setValue(item.id);
+      this.orderItemForm!.get('itemName')!.setValue(item.name);
+      this.orderItemForm!.get('price')!.setValue(item.price);
     }
   }
   calculateOrderTotal(): number {
     let subTotal = this.calcualteSubTotal();
     let withShipping = subTotal + this.shippingRates[3];
     let orderTotal =
-      withShipping + withShipping * this.orderForm?.get('taxRate')?.value;
-    return Number(orderTotal.toFixed(2));
+      (subTotal + withShipping) * this.orderForm?.get('taxRate')?.value;
+    return Number(withShipping + orderTotal.toFixed(2));
   }
   calcualteSubTotal(): number {
     let total = 0;
@@ -503,6 +523,11 @@ export class UpdateOrderComponent implements OnInit {
       deposit: this.orderContext!.deposit!,
       updated: new Date().toISOString(),
       discount: this.orderContext?.discount,
+      taxValue: Number(
+        Number(this.calcualteSubTotal() * formVal.taxRate).toFixed(2)
+      ),
+      itemTotalValue: Number(this.calcualteSubTotal()),
+      shippingCost: this.shippingRates[3],
     };
 
     if (

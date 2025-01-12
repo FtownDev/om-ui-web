@@ -598,10 +598,11 @@
             <h3 class="text-lg text-right font-bold">
               Order Total:
               {{
-                this.orderSubTotal +
-                  (this.orderSubTotal +
-                    this.shippingRates[3] *
-                      this.orderForm.get("taxRate")?.value) | currency
+                (
+                  this.orderSubTotal +
+                  this.shippingRates[3] +
+                  this.getTaxValue()
+                ).toFixed(2) | currency
               }}
             </h3>
 

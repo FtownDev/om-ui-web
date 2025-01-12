@@ -6,7 +6,13 @@ import { CustomerService } from '@/src/app/services/customer.service';
 import { OrderService } from '@/src/app/services/order.service';
 import { Component, inject, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { OrderItem } from '@/src/app/models/Order/OrderItem';
 import { InventoryService } from '@/src/app/services/inventory.service';
 import { InventoryCategory } from '@/src/app/models/Inventory/InventoryCategory';
@@ -20,18 +26,18 @@ import { NgClass, DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 
 @Component({
-    selector: 'app-add-order',
-    templateUrl: './add-order.component.html',
-    styleUrl: './add-order.component.css',
-    imports: [
+  selector: 'app-add-order',
+  templateUrl: './add-order.component.html',
+  styleUrl: './add-order.component.css',
+  imports: [
     SelectCustomerComponent,
     ReactiveFormsModule,
     NgClass,
     NgIcon,
     DecimalPipe,
     CurrencyPipe,
-    DatePipe
-],
+    DatePipe,
+  ],
 })
 export class AddOrderComponent implements OnInit {
   isLoading: Boolean = false;
@@ -85,7 +91,10 @@ export class AddOrderComponent implements OnInit {
       taxRate: [0.0, Validators.required],
       deliveryPickupNotes: [''],
       discount: [0],
-      paymentTerms: [0, Validators.required],
+      paymentTerms: [0],
+      itemTotalValue: [0],
+      shippingCost: [0],
+      taxValue: [0],
     });
 
     this.deliveryWindowForm = this.fb.group({
@@ -192,7 +201,9 @@ export class AddOrderComponent implements OnInit {
       const newItem: OrderItem = {
         itemId: formVal.itemId,
         qty: formVal.qty,
-        orderId: this.orderId_temp,
+        itemCategory: this.getItemCategoryName(formVal.itemId)!,
+        itemName: this.getItemName(formVal.itemId)!,
+        price: this.getItemPrice(formVal.itemId)!,
       };
 
       this.orderSubTotal +=
@@ -285,19 +296,28 @@ export class AddOrderComponent implements OnInit {
     }
   }
 
-  onSubmit() {
-    const tax: number = Number(
+  getTaxValue() {
+    return Number(
       (
         (this.orderSubTotal + this.shippingRates[3]) *
         this.orderForm?.get('taxRate')?.value
       ).toFixed(2)
     );
+  }
 
-    const a: number = Number(
+  onSubmit() {
+    const tax = this.getTaxValue();
+
+    const totalWithShipping: number = Number(
       (this.orderSubTotal + this.shippingRates[3] + tax).toFixed(2)
     );
-    this.orderForm?.get('amount')?.setValue(a);
-    this.orderForm?.get('balanceDue')?.setValue(a);
+    this.orderForm
+      ?.get('itemTotalValue')
+      ?.setValue(Number(this.orderSubTotal).toFixed(2));
+    this.orderForm?.get('shippingCost')?.setValue(this.shippingRates[3]);
+    this.orderForm?.get('taxValue')?.setValue(tax);
+    this.orderForm?.get('amount')?.setValue(totalWithShipping);
+    this.orderForm?.get('balanceDue')?.setValue(totalWithShipping);
 
     const p: number = Number(
       parseFloat(this.orderForm?.get('paymentTerms')?.value).toFixed(2)

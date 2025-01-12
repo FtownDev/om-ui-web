@@ -116,12 +116,10 @@ export class CustomerDetailComponent implements OnInit {
   onEdit() {
     console.log('Edit clicked');
     this.isOpen = false;
-    // Implement edit logic
   }
 
   onDelete() {
     console.log('Delete clicked');
     this.isOpen = false;
-    // Implement delete logic
   }
 }

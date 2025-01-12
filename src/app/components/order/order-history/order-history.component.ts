@@ -17,12 +17,10 @@ import { OrderItemChangeType } from '@/src/app/models/Order/OrderItemChangeType'
 import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-order-history',
-    templateUrl: './order-history.component.html',
-    styleUrl: './order-history.component.css',
-    imports: [
-    DatePipe
-],
+  selector: 'app-order-history',
+  templateUrl: './order-history.component.html',
+  styleUrl: './order-history.component.css',
+  imports: [DatePipe],
 })
 export class OrderHistoryComponent implements OnInit {
   // Flags
@@ -38,7 +36,6 @@ export class OrderHistoryComponent implements OnInit {
 
   // Services
   customerService = inject(CustomerService);
-  inventoryService = inject(InventoryService);
   route = inject(ActivatedRoute);
   orderService = inject(OrderService);
   fb = inject(FormBuilder);
@@ -52,10 +49,6 @@ export class OrderHistoryComponent implements OnInit {
   orderHistory: OrderHistory[] = [];
   orderItemHistory: OrderItemHistory[] = [];
   changeType = OrderItemChangeType;
-
-  // Inventory
-  itemCategories: InventoryCategory[] = [];
-  items: InventoryItem[] = [];
 
   // Mappings
   fieldNameDisplay = FieldNameDisplay;
@@ -100,7 +93,6 @@ export class OrderHistoryComponent implements OnInit {
   loadHistory() {
     if (this.orderId != null) {
       this.orderService.getOrderHistory(this.orderId).subscribe((val) => {
-        console.log('OrderHistory: ', val);
         this.orderHistory = val;
       });
       this.orderService.getOrderById(this.orderId).subscribe((val) => {
@@ -112,16 +104,8 @@ export class OrderHistoryComponent implements OnInit {
 
   loadItemHistory() {
     this.isLoading = true;
-    this.inventoryService.getInventoryCategories().subscribe((res) => {
-      this.itemCategories = res;
-    });
-
-    this.inventoryService.getInventoryItems().subscribe((res) => {
-      this.items = res;
-    });
     if (this.orderId != null) {
       this.orderService.getOrderItemHistory(this.orderId).subscribe((val) => {
-        console.log('ItemHistory: ', val);
         this.orderItemHistory = val;
         this.isLoading = false;
       });
@@ -134,12 +118,6 @@ export class OrderHistoryComponent implements OnInit {
       .subscribe((val) => {
         this.customerService.setaddressContext(val);
       });
-  }
-
-  getItemDisplayName(itemId: string): string {
-    const item = this.items.find((i) => i.id === itemId);
-    const category = this.itemCategories.find((c) => c.id === item?.categoryId);
-    return item?.name + ' - ' + category?.name;
   }
 
   getEventType(eventId: string): string {

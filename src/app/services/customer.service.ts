@@ -95,7 +95,6 @@ export class CustomerService {
     let requestUrl = `${this.API_URL}/customers/search?pageSize=${this.defaultPageSize}&currentNumber=${this.defaultPage}`;
     let requestBody = JSON.stringify(data);
 
-    console.log('data', data);
     return this.httpClient
       .post<Customer[]>(requestUrl, requestBody, this.httpOptions)
       .pipe(

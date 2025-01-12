@@ -202,26 +202,24 @@
             {{ itemHistory.changedDate | date : "EE MMM dd" : "UTC" }}
           </td>
           <td class="px-1.5 py-2 text-sm text-left">
-            {{ getItemDisplayName(itemHistory.itemId) || itemHistory.itemId }}
+            {{ itemHistory.itemName }} - {{ itemHistory.itemCategory }}
           </td>
-          <td class="px-1.5 py-2 text-sm text-left">
+          <td class="px-1.5 py-2 pr-2 text-sm text-left">
             <span
-              class="relative text-red-500 line-through decoration-2 opacity-80 group text-left"
+              class="relative text-red-500 line-through decoration-2 opacity-80 group text-center"
             >
-              {{ itemHistory.oldQuantity }}
-
-              <span
-                class="bottom-0 left-0 w-full h-0.5 bg-red-500 origin-left"
-              ></span>
+              <p class="text-center">{{ itemHistory.oldQuantity }}</p>
             </span>
           </td>
-          <td class="px-1.5 py-2 text-sm text-left">
-            <span class="inline-block text-green-600 bg-green-100 rounded px-1">
-              {{ itemHistory.newQuantity }}
+          <td class="px-1.5 py-2 pl-4 text-sm text-left">
+            <span
+              class="inline-block text-green-600 bg-green-100 rounded px-1 text-center"
+            >
+              <p class="text-center">{{ itemHistory.newQuantity }}</p>
             </span>
           </td>
           <td class="px-1.5 py-2 text-sm text-center">
-            {{ itemHistory.changedByUserId.substring(0, 5) }}
+            {{ itemHistory.changedByUserName }}
           </td>
         </tr>
         }
